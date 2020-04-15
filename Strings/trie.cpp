@@ -1,7 +1,3 @@
-#include<bits/stdc++.h>
-#define TAM_ALPHA 26
-#define SUM 10000
-using namespace std;
 struct node{
 	bool endWord;
 	int count;
@@ -38,20 +34,3 @@ bool searchWord(string str){
 	return Trie[act].endWord && possible;
 }
 
-int main(){
-	int n; string t;
-	cin >> n;
-	for(int i = 0; i <n ; ++i){
-		cin >> t;
-		push(t);
-	}
-	int q; cin >> q;
-	for(int i = 0;  i< q; i++){
-		cin >> t;
-		if(searchWord(t))
-			cout << "Is in the dictionary\n";
-		else
-			cout << "Nope\n";
-	}
-	return 0;
-}
