@@ -22,10 +22,12 @@ Node query(lli l, lli r) //Node could be just an integer
     }
     return Merge(MAX1, MAX2);
 }
-//7
+//10
 void update(int index, Node value)
 {
-    for(ST[index+=n] = value; index; index>>=1)
+    index+=n
+    ST[index] = Merge(value, ST[index]);
+    for(; index; index>>=1)
     {
         ST[index>>1] = ST[index] + ST[index^1];
     }
