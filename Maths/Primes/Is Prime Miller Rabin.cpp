@@ -1,26 +1,22 @@
-// 25
-#include "../Number Theory/Modular Exponentiation.cpp"
-
-bool isPrime(lli p, int k = 20) {
-  if (p == 2 || p == 3) return 1;
-  if ((~p & 1) || p == 1) return 0;
-  lli d = p - 1, phi = d, r = 0;
-  while (~d & 1) d >>= 1, r++;
-  while (k--) {
-    // set seed with: int main() { srand(time(0)); }
-    lli a = 2 + rand() % (p - 3);  // [2, p - 2]
-    lli e = pow(a, d, p), r2 = r;
-    if (e == 1 || e == phi) continue;
-    bool flag = 1;
-    while (--r2) {
-      e = multiply(e, e, p);
-      if (e == 1) return 0;
-      if (e == phi) {
-        flag = 0;
-        break;
-      }
+//22
+bool isPrimeMillerRabin(lli n) //int128 -> __int128
+{
+    if(n < 2) return false;
+    if( ~n & 1) return false;
+    lli d = n-1, s = 0; //n-1 = 2^s*k
+    for(;(~d&1); d>>=1, s++); //d = k
+    for(lli a: {2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37})
+    {
+        if(n == a) return true;
+        int128 residuo = binaryPow(a, d, n);
+        if(residuo == 1 or residuo == n-1) continue;
+        lli x = s;
+        while(--x)
+        {
+            residuo = (residuo * residuo) % n;
+            if(residuo == n-1) break;
+        }
+        if(x==0) return false;
     }
-    if (flag) return 0;
-  }
-  return 1;
+    return true; //Probability = 1 - (1/4)^size_of(vector_a)
 }
