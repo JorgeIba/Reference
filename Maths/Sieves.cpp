@@ -7,7 +7,7 @@ void primesSieve(int n)
 	isPrime[0] = isPrime[1] = false;
 	primes.push_back(2);
 	for(int i = 4; i <= n; i += 2) isPrime[i] = false;
-	for(lli i = 3; i*i <= n; i += 2)
+	for(lli i = 3; i <= n; i += 2)
     {
 		if(isPrime[i])
         {
