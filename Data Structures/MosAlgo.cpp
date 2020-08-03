@@ -2,7 +2,9 @@
 struct Query{
 	int l, r, indx;
 	bool operator<(const Query& q) const{
-		return make_pair(l/blck,r) < make_pair(q.l/blck, q.r);
+		if(l/blck != q.l/blck) return l/blck < q.l/blck;
+		if(l/blck & 1) return r < q.r;
+		return r > q.r;
 	}
 }Q[MXN];
 // Change the 2 functions below deppending on the problem
