@@ -25,7 +25,7 @@ Node query(lli l, lli r) //Node could be just an integer
 //10
 void update(int index, Node value)
 {
-    index+=n
+    index+=n;
     ST[index] = Merge(value, ST[index]);
     for(; index; index>>=1)
     {
