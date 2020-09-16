@@ -36,7 +36,7 @@ void fft(vector<cd> &A, bool inv) //O(n logn)
 }
 
 template<typename T>
-vector<T> multiply(vector<T> &A, vector<T> &B) //O(n logn), it uses FFT
+vector<T> multiply(const vector<T> &A, const vector<T> &B) //O(n logn), it uses FFT
 {
     int n = SZ(A) + SZ(B) - 1, sz = nearestPowerTwo(n);
     vector<cd> FA(sz), FB(sz);
