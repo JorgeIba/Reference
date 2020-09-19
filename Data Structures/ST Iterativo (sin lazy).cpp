@@ -14,7 +14,7 @@ struct SegmentTreeIt{
 		build();
 	}
 	T merge(T a, T b){
-    	return (a + b) % mod;
+    	return a + b;
 	}
 	void build(){
 		for(int i = size - 1; i; i--)
