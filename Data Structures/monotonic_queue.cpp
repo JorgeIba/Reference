@@ -22,6 +22,7 @@ struct monotonic_queue{
 		cnt_removed++;
 		_size--;
 	}
+	//returns the minimum/maximum element in the queue
 	T monotonic(){
 		return Q.front().first;
 	}
