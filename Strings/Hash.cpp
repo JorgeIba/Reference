@@ -1,3 +1,4 @@
+//requires lli = __int128, otherwise change the values of MOD, P ans PI (inverse of P)
 struct Hash {
 	lli MOD=212345678987654321LL,P=1777771,PI=106955741089659571LL;
 	vector<lli> h,pi;
