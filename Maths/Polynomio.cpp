@@ -1,10 +1,10 @@
 template<typename T>
 struct Poly{
     vector<T> P;
-    const int p = -1; // change for MOD
+    const int p = 1; //!! change for MOD
 
     Poly(){}
-    Poly(int n): P(n) {}
+    Poly(int n, int value = 0): P(n, value) {}
     Poly(vector<T> A) {P = A;}
 
     void normalize(){ while(!P.empty() && !P.back()) P.pop_back();} // get rid of leading zeroes
@@ -20,26 +20,26 @@ struct Poly{
 
     T add(T a, T b)
     {
-		if(p == -1) return a+b;
-	    return a+b<p? a+b: a+b-p; //with MOD
+		if(p == 1) return a+b;
+	    return a+b<p? a+b: a+b-p;
     }
 
     T sub(T a, T b)
 	{
-		if(p == -1) return a-b;
+		if(p == 1) return a-b;
 		return a-b<0?a-b+p:a-b;
 	}
 
     T mul(T a, T b)
     {
-		if(p==-1) return a*b;
+		if(p == 1) return a*b;
         return (a*b)%p;
     }
 
 	T inv(T n)
     {
-        if(p==-1) return 1 / n;
-        //return powerMod(n, p-2, p);
+        if(p == 1) return 1 / n;
+        return powerMod(n, p-2, p); //!!MOD
     }
 
 
@@ -146,11 +146,10 @@ struct Poly{
 		int n = SZ(P);
 		Poly<T> ans(n-1);
 		for(int i = 1; i<n; i++)
-		{
 			ans[i-1] = mul(P[i],i);
-		}
 		return ans;
 	}
+    
 
 	Poly interpolate(vector<T> &x, vector<T> &y)
 	{
@@ -160,13 +159,74 @@ struct Poly{
 		vector<T> d = pp.multiEvaluate(x);
 		vector< Poly<T> > inTree(2*n);
 		STE = pp.STE;
-		for(int i = n; i<2*n; i++) inTree[i] = vector<T>{ mul(y[i-n], inv(d[i-n])) }; //y_i / d_i
+		for(int i = n; i<2*n; i++)
+            inTree[i] = vector<T>{ mul(y[i-n], inv(d[i-n])) }; //y_i / d_i
 		for(int i = n-1; i; i--)
-		{
 			inTree[i] =  inTree[i<<1] * STE[i<<1|1] + inTree[i<<1|1] * STE[i<<1];
-		}
 		return inTree[1];
 	}
+
+    Poly integrate(){
+        Poly<T> A(SZ(P) + 1);
+        for(int i = 1; i<=SZ(P); i++)
+            A[i] = mul(P[i-1], inv(i));
+        return A;
+    }
+
+    Poly logn(){
+        assert(P[0] == 1);
+        int n = SZ(P);
+        Poly<T> A = ((*this).derivate()) * ((*this).invert());
+        A.resize(n);
+        A = A.integrate();
+        A.resize(n);
+        return A;
+    }
+
+    Poly exp(int d = -1){ //E(x) = E(x)(1-ln(E(x))+A(x))
+        if(d == -1) d = SZ(P);
+        assert(P[0] == 0);
+        Poly<T> E = vector<T>{1};
+        while(SZ(E) < d){
+            int c = 2*SZ(E);
+            E.resize(c);
+            Poly<T> S = E.logn();
+            S = (*this)-S;
+            S[0] = 1;
+            E = E * S;
+            E.resize(c);
+        }
+        E.resize(d);
+        return E;
+    }
+
+    Poly sqrt()
+    {
+        T r0 = 1; //! r0^2 == P[0] mod p
+        T inv2 = inv(2);
+        Poly<T> R(1, r0); 
+        while(SZ(R) < SZ(P))
+        {
+            int c = 2*SZ(R);
+            R.resize(c);
+            Poly<T> F = P;
+            F.resize( min(c, SZ(P)) );
+            F = F * (R.invert());
+            for(int i = 0; i<c; i++)
+                R[i] = (R[i] + F[i])*inv2 % p;
+        }
+        R.resize(SZ(P));
+        return R;
+    }
+
+    T eval(T a){
+        T sum = 0, x = 1;
+        for(int i = 0; i<SZ(P); i++){
+            sum = add(sum, mul(x, P[i]));
+            x = mul(x, a);
+        }
+        return sum;
+    }
 };
 
 template<typename T>
