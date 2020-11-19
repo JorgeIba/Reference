@@ -16,12 +16,13 @@ void suffixArray(string t){
 	t += "$"; //Alphabetically less that all characters
 	int n = t.size();
 	suff.assign(n,0);
+	lcp.assign(n,0);
 	vector<int> c(n);
 	vector<pair<char,int>> a(n);
 	for(int i = 0; i < n; i++) a[i] = {t[i], i};
 	sort(a.begin(), a.end());
-	for(int i = 0; i < n; i++) p[i] = a[i].se;
-	c[p[0]] = 0;
+	for(int i = 0; i < n; i++) suff[i] = a[i].se;
+	c[suff[0]] = 0;
 	for(int i = 1; i < n; i++){
 		if(a[i].fi == a[i-1].fi) c[suff[i]] = c[suff[i-1]];
 		else c[suff[i]] = c[suff[i-1]]+1;
@@ -43,8 +44,8 @@ void suffixArray(string t){
 	}
 	k = 0;
 	for(int i = 0; i < n-1; i++){
-		int pi = (c[i]-1+n)%n;
-		int j = suff[pi];
+		int pi = c[i];
+		int j = suff[(pi+1+n)%n];
 		while((i+k) < n && (j+k) < n && t[i+k] == t[j+k]) k++;
 		lcp[pi] = k;
 		k = max(k-1, 0);
