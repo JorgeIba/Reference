@@ -22,7 +22,7 @@ void suffixArray(string t){
 	sort(a.begin(), a.end());
 	for(int i = 0; i < n; i++) p[i] = a[i].se;
 	c[p[0]] = 0;
-	for(int i = 0; i < n; i++){
+	for(int i = 1; i < n; i++){
 		if(a[i].fi == a[i-1].fi) c[suff[i]] = c[suff[i-1]];
 		else c[suff[i]] = c[suff[i-1]]+1;
 	}
@@ -33,7 +33,7 @@ void suffixArray(string t){
 		vector<int> c_new(n);
 		c_new[suff[0]] = 0;
 		for(int i = 1; i < n; i++){
-			pair<int,int> prev = {c[suff[i-1]], c[(suff[i-1]+(1<<k)%n)]};
+			pair<int,int> prev = {c[suff[i-1]], c[(suff[i-1]+(1<<k))%n]};
 			pair<int,int> now = {c[suff[i]], c[(suff[i]+(1<<k))%n]};
 			if(now == prev) c_new[suff[i]] = c_new[suff[i-1]];
 			else c_new[suff[i]] = c_new[suff[i-1]]+1;
@@ -45,7 +45,7 @@ void suffixArray(string t){
 	for(int i = 0; i < n-1; i++){
 		int pi = (c[i]-1+n)%n;
 		int j = suff[pi];
-		while(t[i+k] == t[j+k]) k++;
+		while((i+k) < n && (j+k) < n && t[i+k] == t[j+k]) k++;
 		lcp[pi] = k;
 		k = max(k-1, 0);
 	}
