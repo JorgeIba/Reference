@@ -1,10 +1,10 @@
-// Constructs Suffix Array on O(n)
+// Constructs Suffix Array on O(n log n)
 // Suff : stores indexes of the alphabetically ordered sufixes
 // lcp : longest common prefix betwen suffix i, i+1
 vector<int> suff;
 string t;
 vector<int> lcp;
-void count_sort(vector<int>& p, const vi& c){
+void count_sort(vector<int>& p, const vector<int>& c){
 	int n = c.size();
 	vector<int> p_new(n), cnt(n+1);
 	for(int x : c) cnt[x+1]++;
@@ -45,7 +45,7 @@ void suffixArray(string t){
 	k = 0;
 	for(int i = 0; i < n-1; i++){
 		int pi = c[i];
-		int j = suff[(pi+1+n)%n];
+		int j = suff[(pi-1+n)%n];
 		while((i+k) < n && (j+k) < n && t[i+k] == t[j+k]) k++;
 		lcp[pi] = k;
 		k = max(k-1, 0);
