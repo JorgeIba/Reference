@@ -61,3 +61,10 @@ vector<T> multiply(vector<T> A, vector<T> B){ //O(n logn) it uses NTT
 	A.resize(sz);
 	return A;
 }
+
+/* To found primitive roots
+	for(lli g = 2; g<=20 ; g++)
+    {
+        if(powerMod(g, (MOD-1)/2, MOD) != 1) cout << g << endl;
+    }
+*/

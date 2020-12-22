@@ -9,7 +9,7 @@ lli pi_0(lli N)
     for(lli i = 1; i<=m; i++)
     {
         values.push_back(i); //Values that dp can reach
-        if(i*i != N)
+        if(i != N/i)
         {
             values.push_back(N/i);
         }
