@@ -1,6 +1,6 @@
 template <typename T,typename S> 
 struct SegmentTreeItLazy{ // 0 - indexed
-	T neutro = 0;
+	T neutro = 0, neutro_lazy = 0;
 	int size, height;
 	vector<T> st, delUp;
 	vector<bool> upd;
@@ -10,7 +10,7 @@ struct SegmentTreeItLazy{ // 0 - indexed
 		st.resize(2*n);
         if(v.empty()) fill(all(st), val);
 		size = n;
-		delUp.resize(n);
+		delUp.resize(n, neutro_lazy);
 		upd.resize(n);
 		height = sizeof(int) * 8 - __builtin_clz(size);
         if(!v.empty()) forn(i,n) st[i+size] = set(v[i]);
@@ -42,7 +42,7 @@ struct SegmentTreeItLazy{ // 0 - indexed
 			if (upd[i]){
 				apply(i << 1, delUp[i], k);
 				apply(i << 1 | 1, delUp[i], k);
-				upd[i] = 0, delUp[i] = 0;
+				upd[i] = 0, delUp[i] = neutro_lazy;
 			}
 		}
 	}
