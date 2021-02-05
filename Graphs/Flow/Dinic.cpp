@@ -84,7 +84,7 @@ struct Dinic{
             dist[t] = 0;
             while(bfs(s, t))
             {
-                int f = 0;
+                lli f = 0;
                 fill(all(pos), 0);
                 while((f = BlockingFlow(s, t, INF)))
                 {
