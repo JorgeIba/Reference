@@ -137,3 +137,22 @@ struct Matrix{
         cout << endl;
     } 
 };
+
+//O(n^3 log(k)^2)
+template <typename T>
+Matrix<T> geometric(const Matrix<T> &M, int k) //A + A^2 + ... + A^(2*n) = (A+A^2+..+A^(n)) * (I + A^(n))
+{  //!Warning if k == 0 will get in cycle
+    int n = M.rows;
+    auto I = Matrix<T>::Identity(n);
+    if(k == 1){
+        return M;
+    }
+    else
+    {
+        int mid = k/2;
+        auto ans = geometric(M, mid) * (I + (M^mid));
+        if(k&1) return ans + (M^k);
+        else return ans;
+    }
+}
+
