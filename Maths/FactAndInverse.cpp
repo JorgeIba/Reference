@@ -17,7 +17,7 @@ lli nCr[maxN+5][maxN+5];
 void prec()
 {
     nCr[0][0] = 1;
-    for(int i = 1; i<maxN; i++)
+    for(int i = 1; i<=maxN; i++)
     {
         for(int j = 0; j<=i; j++)
         {

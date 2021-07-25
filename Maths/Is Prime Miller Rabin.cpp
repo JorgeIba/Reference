@@ -2,6 +2,7 @@
 bool isPrimeMillerRabin(lli n) //int128 -> __int128
 {
     if(n < 2) return false;
+    if(n <= 3) return true;
     if( ~n & 1) return false;
     lli d = n-1, s = 0; //n-1 = 2^s*k
     for(;(~d&1); d>>=1, s++); //d = k

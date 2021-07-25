@@ -19,3 +19,4 @@ lli dijkstra(lli from, lli to)
     }
     return dist[to];
 }
+

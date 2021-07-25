@@ -90,6 +90,44 @@ vector<T> derivate(const vector<T> &A)
 	return ans;
 }
 
+template<typename T>
+vector<T> integrate(const vector<T> &P){
+	vector<T> A(SZ(P) + 1);
+	for(int i = 1; i<=SZ(P); i++)
+		A[i] = (P[i-1] * inv[i])%p;
+	return A;
+}
+
+template<typename T>
+vector<T> logn(const vector<T> &P){
+	assert(P[0] == 1);
+	int n = SZ(P);
+	vector<T> A = integrate( multiply(derivate(P), invert(P)) );
+	A.resize(n);
+	return A;
+}
+
+template<typename T>
+vector<T> exp(const vector<T> &P, int d = -1){ //E(x) = E(x)(1-ln(E(x))+A(x))
+	if(d == -1) d = SZ(P);
+	assert(P[0] == 0);
+	vector<T> E(1,1);
+	while(SZ(E) < d){
+		int c = 2*SZ(E);
+		E.resize(c);
+		vector<T> S = logn(E);
+		for(int i = 0; i<min(SZ(P),SZ(S)); i++)
+		{
+			S[i] = (P[i] - S[i] + p) % p;
+		}
+		S[0] = 1;
+		E = multiply(E, S);
+		E.resize(c);
+	}
+	E.resize(d);
+	return E;
+}
+
 vector<lli> addPoly(vector<lli> P, const vector<lli> &S)
 {
 	P.resize(max(SZ(P), SZ(S)));

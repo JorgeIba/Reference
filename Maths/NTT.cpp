@@ -47,7 +47,7 @@ void ntt(vector<T> & A, bool inv){ //O(n log n)
 	}
 }
  
-template<int p, int g, typename T>
+template<int p = 998244353, int g = 3, typename T>
 vector<T> multiply(vector<T> A, vector<T> B){ //O(n logn) it uses NTT
 	int sz = SZ(A) + SZ(B) - 1;
 	int size = nearestPowerTwo(sz);

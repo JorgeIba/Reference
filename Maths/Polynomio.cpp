@@ -176,9 +176,7 @@ struct Poly{
     Poly logn(){
         assert(P[0] == 1);
         int n = SZ(P);
-        Poly<T> A = ((*this).derivate()) * ((*this).invert());
-        A.resize(n);
-        A = A.integrate();
+        Poly<T> A = (((*this).derivate()) * ((*this).invert())).integrate();
         A.resize(n);
         return A;
     }
@@ -186,7 +184,7 @@ struct Poly{
     Poly exp(int d = -1){ //E(x) = E(x)(1-ln(E(x))+A(x))
         if(d == -1) d = SZ(P);
         assert(P[0] == 0);
-        Poly<T> E = vector<T>{1};
+        Poly<T> E(1,1);
         while(SZ(E) < d){
             int c = 2*SZ(E);
             E.resize(c);
@@ -217,6 +215,17 @@ struct Poly{
         }
         R.resize(SZ(P));
         return R;
+    }
+
+
+    vector<Poly<T>> STM; //Segment Tree - Multiplying
+    Poly multiMultiply(const vector<Poly<T>> &Polys)
+    {
+        int n = (int)Polys.size();
+        STM.resize(2*n);
+        for(int i = n; i<2*n; i++) STM[i] = Polys[i-n];
+        for(int i = n-1; i; i--) STM[i] = STM[i<<1] * STM[i<<1 | 1];
+        return STM[1];
     }
 
     T eval(T a){
