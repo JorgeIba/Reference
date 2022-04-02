@@ -74,3 +74,49 @@ vector<lli> sieveMulFunction(lli n)
     }
     return f;
 }
+
+
+// Segmented Sieve
+const lli L1D_CACHE_SIZE = 32768;
+vector<lli> primes;
+
+void segmented_sieve(lli limit)
+{
+    if(limit < 2) return; 
+
+    primes.push_back(2);
+    lli sqrt_n = sqrt(limit);
+    lli segment_size = max(sqrt_n, L1D_CACHE_SIZE);
+
+    vector<char> sieve(segment_size), is_prime(sqrt_n + 1, true);
+    vector<lli> primes_segment, multiples;
+
+    lli i = 3, n = 3;
+
+    for (lli low = 0; low <= limit; low += segment_size)
+    {
+        fill(all(sieve), true);
+
+        lli high = min(low + segment_size - 1, limit);
+
+        for (; i * i <= high; i += 2)
+            if (is_prime[i])
+            {
+                primes_segment.push_back(i);
+                multiples.push_back(i*i-low);
+                for (lli j = i * i; j <= sqrt_n; j += i)
+                    is_prime[j] = false;
+            }
+
+        for (int i = 0; i < SZ(primes_segment); i++)
+        {
+            for (lli &j = multiples[i]; j < segment_size; j += 2*primes_segment[i])
+                sieve[j] = false;
+            multiples[i] -= segment_size;
+        }   
+
+        for (; n <= high; n += 2)
+            if (sieve[n - low]) // n is a prime
+                primes.push_back(n);                
+    }
+}

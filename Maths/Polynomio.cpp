@@ -18,26 +18,22 @@ struct Poly{
     void operator=(vector<T> A){this->P=A;}
     void operator=(Poly<T> A){this->P=A.P;}
 
-    T add(T a, T b)
-    {
+    T add(T a, T b){
 		if(p == 1) return a+b;
 	    return a+b<p? a+b: a+b-p;
     }
 
-    T sub(T a, T b)
-	{
+    T sub(T a, T b){
 		if(p == 1) return a-b;
 		return a-b<0?a-b+p:a-b;
 	}
 
-    T mul(T a, T b)
-    {
+    T mul(T a, T b){
 		if(p == 1) return a*b;
         return (a*b)%p;
     }
 
-	T inv(T n)
-    {
+	T inv(T n){
         if(p == 1) return 1 / n;
         return powerMod(n, p-2, p); //!!MOD
     }
@@ -114,13 +110,21 @@ struct Poly{
         int n = SZ(A),  m = SZ(B);
         if(n >= m){
             Poly<T> R = (A/B)*B;
-            A.resize(m-1);
-            for(int i = 0; i<m-1; i++){
-                A[i] = sub(A[i], R[i]);
-            }
+            A = A - R;
         }
         return A;
     }
+
+    Poly binPowMod(lli k, const Poly<T> &M) {
+		Poly<T> ANS(1,1);
+		Poly<T> POWERS = *this % M;
+		while(k) {
+			if(k & 1) ANS = (ANS * POWERS) % M;
+			k >>= 1;
+			POWERS = (POWERS * POWERS) % M;
+		}
+		return ANS;
+	}
 
 
     vector< Poly > STE; //Segment Tree - Evaluate
