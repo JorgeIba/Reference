@@ -2,7 +2,6 @@ vector<lli> PrefixFunction(string &s)
 {
     lli n = s.length();
     vector< lli > pi(n);
-    pi[0] = 0;
     for(int i = 1; i<n; i++)
     {
         lli j = pi[i-1];

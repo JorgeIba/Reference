@@ -1,5 +1,5 @@
 //20
-vector<int> primes;
+vector<lli> primes;
 vector<bool> isPrime;
 void primesSieve(int n)
 {

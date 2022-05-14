@@ -20,6 +20,7 @@
 
     Si $a$ es real y alguno de $n$ o $m$ es un entero positivo $\displaystyle \lfloor \frac{\lfloor \frac{a}{m} \rfloor }{n} \rfloor = \lfloor \frac{a}{mn} \rfloor$
 
-    Series de potencias famosas:
-    $
+    $ \operatorname{lcm}(a,b,c,d)=\frac{a\cdot b\cdot c\cdot d\cdot\operatorname{gcd}(a,b,c)\cdot\operatorname{gcd}(a,b,d)\cdot\operatorname{gcd}(a,c,d)\cdot\operatorname{gcd}(b,c,d)}{\operatorname{gcd}(a,b)\cdot\operatorname{gcd}(a,c)\cdot\operatorname{gcd}(a,d)\cdot\operatorname{gcd}(b,c)\cdot\operatorname{gcd}(b,d)\cdot\operatorname{gcd}(c,d)\cdot\operatorname{gcd}(a,b,c,d)} $
+
+    Hensel's Lemma: Si tenemos una solución para $f(a) \equiv 0 \pmod{p^k}$ y se cumple que $f'(a) \not\equiv 0 \pmod{p^{2k}}$ entonces se tiene que $a = r \pmod{p^k}$, donde $r$ es la solución a $f(r) \equiv 0 \pmod{p^{2k}}$.
 }
