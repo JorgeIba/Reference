@@ -7,6 +7,9 @@
     Si $S_{n}^{k} = \sum_{i=1}^{n} i^k$ entonces: $S_{n}^{k} = \frac{ (n+1)^{k+1} - 1 - \sum_{j=0}^{k-1} {{k+1} \choose j} S_n^j }{ k+1 }$
 
     A binomial coefficient ${\tbinom {m}{n}}$ is divisible by a prime p if and only if at least one of the base p digits of n is greater than the corresponding digit of m.
+    In particular, ${\displaystyle {\tbinom {m}{n}}}$ is odd if and only if the binary digits (bits) in the binary expansion of n are a subset of the bits of m.
+
+    ${\tbinom {n}{m}} = {\tbinom {n_0}{m_0}} {\tbinom {\lfloor \frac{n}{p} \rfloor }{\lfloor \frac{m}{p} \rfloor}}$ $n_0$ is $n$ modulo p and $m_0$ is $m$ modulo p.
 
     $\displaystyle\prod_{n=0}^{\infty} (1-x^{2kn+k-l})(1-x^{2kn+k+l})(1-x^{2kn+2k}) = \displaystyle\sum_{n=-\infty}^{\infty}(-1)^nx^{kn^2+ln}$
 
@@ -23,4 +26,15 @@
     $ \operatorname{lcm}(a,b,c,d)=\frac{a\cdot b\cdot c\cdot d\cdot\operatorname{gcd}(a,b,c)\cdot\operatorname{gcd}(a,b,d)\cdot\operatorname{gcd}(a,c,d)\cdot\operatorname{gcd}(b,c,d)}{\operatorname{gcd}(a,b)\cdot\operatorname{gcd}(a,c)\cdot\operatorname{gcd}(a,d)\cdot\operatorname{gcd}(b,c)\cdot\operatorname{gcd}(b,d)\cdot\operatorname{gcd}(c,d)\cdot\operatorname{gcd}(a,b,c,d)} $
 
     Hensel's Lemma: Si tenemos una solución para $f(a) \equiv 0 \pmod{p^k}$ y se cumple que $f'(a) \not\equiv 0 \pmod{p^{2k}}$ entonces se tiene que $a = r \pmod{p^k}$, donde $r$ es la solución a $f(r) \equiv 0 \pmod{p^{2k}}$.
+
+    Propiedades de números de Fibonacci (0-indexed): 
+
+    \begin{center}
+        $F_{n-1}F_{n+1} - F_n^2 = (-1)^n$
+
+        $F_{n+k} = F_kF_{n+1} + F_{k-1}F_n$
+
+        $gcd(F_m, F_n) = F_{gcd(m,n)}$
+    \end{center}
+
 }

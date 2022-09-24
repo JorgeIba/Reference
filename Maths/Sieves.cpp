@@ -13,7 +13,7 @@ void primesSieve(int n)
         {
 			primes.push_back(i);
 			if(i * i <= n)
-				for(int j = i * i; j <= n; j += 2 * i)
+				for(lli j = i * i; j <= n; j += 2 * i)
 					isPrime[j] = false;
 		}
 	}

@@ -1,7 +1,7 @@
 //29
 void GaussJordanZ2(vector< bitset<maxN> > &equations, vector<int> &ans)
 {
-	int rows = maxN, cols = maxN;
+	int rows = SZ(equations), cols = maxN;
 	for(int i = 0, j = 0; (i < rows) && (j < cols); j++)
 	{
 		int selected = -1;

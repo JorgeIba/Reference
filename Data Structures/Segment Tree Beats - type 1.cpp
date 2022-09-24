@@ -4,7 +4,12 @@
     Range update max(a,x)
     Range update a += x
     Range query sum(l, r)
+
+    for Range update a %= x
+    tagCondition is just if node is a leaf
+    breakCondition is just if max < x
 */
+
 
 
 const lli INF = 1e18;
@@ -243,6 +248,7 @@ struct SegmentTreeBeats {
         updatePLUS(1, 1, N, ql, qr, value);
     }
     
+
     //? QUERIES ?//
     // SUM
     lli query_sum(int curr, int l, int r, int ql, int qr)
