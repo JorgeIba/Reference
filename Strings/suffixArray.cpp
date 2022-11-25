@@ -78,7 +78,8 @@ struct SuffixArray {
 
 	void print(){
 		int n = t.size();
-		for(int x : suff) cout << t.substr(x, n-x);
+		for(int x : suff)
+			cout << t.substr(x, n-x) << '\n';
 	}
 };
 

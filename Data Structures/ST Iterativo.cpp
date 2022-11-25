@@ -1,10 +1,10 @@
-template <typename T,typename S> 
+template <typename T,typename S>
 struct SegmentTreeItLazy{ // 0 - indexed
 	T neutro = 0, neutro_lazy = 0;
 	int size, height;
 	vector<T> st, delUp;
 	vector<bool> upd;
-    
+
     //S tipo de dato que recibe
 	SegmentTreeItLazy(int n, T val = 0,  const vector<S> &v = vector<S>()){
 		st.resize(2*n);
@@ -24,7 +24,7 @@ struct SegmentTreeItLazy{ // 0 - indexed
 		//return min(a, b);
 	}
 	void apply(int i, T val, int k){
-		st[i] += val * k; 
+		st[i] += val * k;
 		if (i < size) delUp[i] += val, upd[i] = 1;
 	}
 	void calc(int i){
@@ -64,7 +64,7 @@ struct SegmentTreeItLazy{ // 0 - indexed
 		}
 		return res;
 	}
-	T& operator[](int i) { return st[i + size]; }
+	T& operator[](int i) { push(i+size); return st[i + size]; }
 	T set(S x){
 		return x;
 	}
