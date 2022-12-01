@@ -1,47 +1,33 @@
-vector <int> KMP(string& pat){
-	int length = pat.size();
+/*
+ * preffix array at position i gives us the length of the largest propper
+ * preffix which is also a suffix in substring patt[0,...,i]
+ */
+vector <int> preffix_array(string& patt){
+	int length = patt.size();
 	vector <int> lps (length, 0);
-	lps[0] = 0;
-	int i = 0;
-	int j = 1;
-	while(j < length){
-		if(pat[i] != pat[j]){
-			if(i != 0)
-				i = lps[i-1];
-			else{
-				lps[j] = 0;
-				j++;
-			}
-
-		}
-		else{
-			lps[j] = i + 1;
-			i++;
-			j++;
-		}
+	int j = 0;
+	for(int i = 1; i < length; i++) {
+		j = lps[i-1];
+		while(j > 0 && patt[i] != patt[j]) j = lps[j-1];
+		lps[i] = j + patt[i] == patt[j];
 	}
 	return lps;
 }
-vector<int> substringSearch(string text, string pattern){
+// Returns an array of all the indexes of text where pattern can be found
+vector<int> kmp(string text, string pattern){
 	vector<int> indexes;
 	int i = 0;
 	int j = 0;
-	vector<int> lps = KMP(pattern);
-	while(i < text.size()){
-		if(text[i] == pattern[j]){
-			i++;
+	vector<int> lps = preffix_array(pattern);
+	for(int i = 0; i < text.size(); i++) {
+		while(j > 0 && pattern[j] != text[i]) j = lps[j - 1];
+		if(text[i] == pattern[j]) {
 			j++;
-		}
-		if(j == pattern.size()){
-			indexes.push_back(i-j+1);
-			j = lps[j-1];
-		}
-		else if(i < text.size() && pattern[j] != text[i]){
-		       if(j != 0)
-			       j = lps[j-1];
-		       else i++;
+			if(j == pattern.size()) {
+				indexes.push_back(i - j + 1);
+				j = lps[j-1];
+			}
 		}
 	}
-	// A vector with the indexes where the pattern matches
 	return indexes;
 }
