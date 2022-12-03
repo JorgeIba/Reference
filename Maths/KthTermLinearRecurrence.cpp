@@ -27,6 +27,7 @@ T kthTermLinearRecurrence(const vector<T> &initial, const vector<T> &constants, 
 
 /*
     O( N^2 log(K) )
+	0 - Indexed
 */
 lli kthTermLinearRecurrence(const vector<lli> & P, const vector<lli> & init, lli n){
 	int deg = P.size();

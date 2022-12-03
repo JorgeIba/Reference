@@ -11,9 +11,9 @@ vector<lli> getDivs(vector<pair<lli,lli>> &factors)
     for (int stack_level = 0; stack_level < n; ++stack_level)
     {
         int count_so_far = count;
-        int prime = factors[stack_level].first;
+        lli prime = factors[stack_level].first;
         int exponent = factors[stack_level].second;
-        int multiplier = 1;
+        lli multiplier = 1;
         for (int j = 0; j < exponent; ++j)
         {
             multiplier *= prime;

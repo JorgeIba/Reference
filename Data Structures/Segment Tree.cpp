@@ -1,40 +1,107 @@
-//10
-void propagate(lli id, lli l, lli r, lli value)
-{
-    ST[id] += (r-l+1)*value; //Suma
-    if(l!=r)
+/* 
+    To support other things, you need to:
+    
+    * Add extra things in Node
+    * Add update method in UPDATES 
+    * Add update node method in NODE UPDATES
+    * Support updateFromChildren
+    * Add query method in QUERIES
+*/
+
+const lli maxN = 5e5+10;
+const lli neutro_lazy_sum = 0;
+struct Node{
+    lli l, r;
+
+    lli value;
+    lli sum;
+    lli lazySUM = neutro_lazy_sum;
+};
+
+Node ST[4*maxN]; 
+
+template<typename T>
+struct SegmentTree {
+    lli N;
+    
+
+    SegmentTree(lli n, const vector<T> &values): N(n){
+        build(1, 1, N, values);
+    }
+    
+    void init_leaf(int curr, T value){
+        ST[curr].value = value;
+        ST[curr].sum = value;
+    }
+
+    //* NODE UPDATES *//
+    void updateNodeSUM(int curr, T value){
+        ST[curr].sum += (ST[curr].r - ST[curr].l + 1) * value;
+        ST[curr].value += value;
+        ST[curr].lazySUM += value;
+    }
+
+    //* LAZY MANAGMENT *//
+    void pushToChildren(int curr){
+        if(ST[curr].lazySUM != neutro_lazy_sum){
+            updateNodeSUM(2*curr, ST[curr].lazySUM);
+            updateNodeSUM(2*curr+1, ST[curr].lazySUM);
+            ST[curr].lazySUM = neutro_lazy_sum;
+        }
+    }
+
+    void updateFromChildren(int curr){
+        // Mantain Sum
+        ST[curr].sum = ST[2 * curr].sum + ST[2 * curr + 1].sum;     
+    }
+    
+    //* UPDATES *//
+    // SUM
+    void updateSUM(int curr, int l, int r, int ql, int qr, T value)
     {
-        lazy[2*id] += value;
-        lazy[2*id + 1] += value;
-    }
-}
-//16
-void update(lli id, lli l, lli r, lli start, lli end, lli value)
-{
-    if(lazy[id] != 0){
-        propagate(id, l, r, lazy[id]);
-        lazy[id] = 0;
-    }
-    if( end < l || r < start) return;
-    if ( start <= l && r <= end) propagate(id, l, r, value);
-    else{
-        lli mid = (l+r)/2;
-        update(2*id, l, mid, start, end, value);
-        update(2*id+1, mid+1, r, start, end, value);
-        ST[id] = ST[2*id] + ST[2*id + 1];
-    }
-}
-//14
-lli query(lli id, lli l, lli r, lli start, lli end) 
-{
-    if(lazy[id] != 0){
-        propagate(id, l, r, lazy[id]);
-        lazy[id] = 0;
-    }
-    if( end < l || r < start) return 0;
-    if ( start <= l && r <= end  ) return ST[id];
-    else{
+        if( l > qr || r < ql) return;
+        else if(ql <= l && r <= qr){
+            updateNodeSUM(curr, value);
+            return;
+        }
+
+        pushToChildren(curr);
+
         lli mid = l + (r-l)/2;
-        return query(2*id, l, mid, start, end) + query(2*id+1, mid+1, r, start, end);
+        updateSUM(2*curr, l, mid, ql, qr, value);
+        updateSUM(2*curr+1, mid+1, r, ql, qr, value);
+
+        updateFromChildren(curr);
     }
-}
+    void updateSUM(int ql, int qr, T value){
+        updateSUM(1, 1, N, ql, qr, value);
+    }
+    
+    //? QUERIES ?//
+    // SUM
+    lli query_sum(int curr, int l, int r, int ql, int qr)
+    {
+        if(l > qr || r < ql) return 0;
+        else if(ql <= l && r <= qr) return ST[curr].sum;
+        else {
+            pushToChildren(curr);
+            lli mid = (l+r) / 2;
+            return query_sum(2*curr, l, mid, ql, qr) + query_sum(2*curr+1, mid+1, r, ql, qr);
+        }
+    }
+    lli query_sum(int ql, int qr){
+        return query_sum(1, 1, N, ql, qr);
+    }
+
+    void build(int curr, int l, int r, const vector<T> &values){
+        ST[curr].l = l, ST[curr].r = r;
+        if(l == r) {
+            init_leaf(curr, values[l-1]);
+        } else {
+            lli mid = (l+r)/2;
+            build(2*curr, l, mid, values);
+            build(2*curr+1, mid+1, r, values);
+            updateFromChildren(curr);
+        }
+    }
+};

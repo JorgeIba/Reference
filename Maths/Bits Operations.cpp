@@ -9,6 +9,9 @@ int turnOffLastBit(int s){ return s & (s-1);  }
 //__builtin_popcount(n) counting the number of 1's
 //__builtin_popcountll(n) counting the number of 1's
 
+//5
+for(int mask = n; mask; mask=(mask-1)&n) // to traverse all submasks
+
 //13
 int getSetBitsFromOneToN(int N)
 { 
