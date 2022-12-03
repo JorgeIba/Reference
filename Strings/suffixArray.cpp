@@ -81,6 +81,15 @@ struct SuffixArray {
 		for(int x : suff)
 			cout << t.substr(x, n-x) << '\n';
 	}
+
+	long long int number_diff_strings() {
+		calcLCP();
+		long long int n = t.size() - 1;
+		long long int ans = (n*n + n) / 2;
+		for(int i = 0; i <= n; i++)
+			ans -= lcp[i];
+		return ans;
+	}
 };
 
 int main() {
