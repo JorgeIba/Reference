@@ -25,7 +25,7 @@ struct DisjointSparseTable{
 			}
 			acum = NEUTRO; 
 			for(int i = N-1; i >= 0; --i){
-				acum = OP(acum, arr[i]);
+				acum = OP(arr[i], acum);
 				right[j][i] = acum;
 				if((i & mask) == 0) acum = NEUTRO; 
 			}
@@ -35,6 +35,6 @@ struct DisjointSparseTable{
 	T query(int l, int r){
 		if(l == r) return left[0][l];
 		int i = 31 - __builtin_clz(l^r);
-		return OP(left[i][r], right[i][l]);
+		return OP(right[i][l], left[i][r]);
 	}
 };

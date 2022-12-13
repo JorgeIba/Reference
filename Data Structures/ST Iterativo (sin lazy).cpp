@@ -1,10 +1,10 @@
 // 0-indexed
 template <typename T, typename S>
 struct SegmentTreeIt{
-	T neutro = 0;
+	T neutro = T();
 	int size;
 	vector<T> st;
-	SegmentTreeIt(int n, T val = 0, const vector<S> &v = vector<S>()){
+	SegmentTreeIt(int n, T val = T(), const vector<S> &v = vector<S>()){
 		st.resize(2*n);
 		if(v.empty())
 			fill(all(st),val);
@@ -22,18 +22,22 @@ struct SegmentTreeIt{
 	}
 	void update(int i, T val) {
 		for(st[i += size] = val; i > 1; i >>= 1)
-				st[i >> 1] = merge(st[i], st[i ^ 1]);
+			if(i & 1)
+				st[i >> 1] = merge(st[i^1], st[i]);
+            else 
+                st[i >> 1] = merge(st[i], st[i^1]);
 	}
 	T query(int l, int r){
-		T ans = neutro;
+		T ansL = neutro;
+        T ansR = neutro;
 		for(l += size, r += size; l <= r; l >>= 1, r >>= 1) {
-			if (l & 1) ans = merge(ans, st[l++]);
-			if (~r & 1) ans = merge(ans, st[r--]);
+			if (l & 1) ansL = merge(ansL, st[l++]);
+			if (~r & 1) ansR = merge(st[r--], ansR);
 		}
-		return ans;
+		return merge(ansL, ansR);
 	}
 	T set(S x){
-		return x;
+		return T(x);
 	}
 	T& operator[](int i) { return st[i + size]; }
 };
