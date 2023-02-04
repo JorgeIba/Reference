@@ -1,22 +1,29 @@
-lli dijkstra(lli from, lli to)
-{
-    vector<lli> dist( adj.size() , INF );
 
-    priority_queue< pair<lli,lli>, vector<pair<lli,lli>>, greater<pair<lli,lli>> > q;
-    q.push({0,from}); // {costo, nodo}
-    dist[from] = 0;
-    while(!q.empty())
-    {
-        lli u = q.top().second; q.pop();
-        for(auto v: adj[u])
-        {
-            if(dist[u] + v.second < dist[v.first])
-            {
-                dist[v.first] = dist[u] + v.second;
-                q.push({ dist[v.first], v.first});
+typedef pair<lli,lli> pairi;
+vector< vector< pairi > > adjList;
+
+const lli INF = 1e17;
+vector<lli> dijkstra(int start){   
+    int n = SZ(adjList);
+    vector<lli> dist( n, INF );
+
+    priority_queue< pairi, vector<pairi>, greater<pairi> > pq;
+
+    pq.push({0,start}); // {costo, nodo}
+    dist[start] = 0;
+
+    while(!pq.empty()){
+        auto [dist_u, u] = pq.top(); pq.pop();
+        
+        if(dist_u > dist[u]) continue;
+
+        for(auto [v, w]: adjList[u]){
+            if(dist[u] + w < dist[v]){
+                dist[v] = dist[u] + w;
+                pq.push({ dist[v], v });
             }
         }
     }
-    return dist[to];
+    return dist;
 }
 
