@@ -2,7 +2,8 @@
 // Call first dfs and then build
 // dfs(adjList, root)
 // build(adjList, root, root)
-// DataStructure is initialized with HLD->indexDS
+// DataStructure is initialized with HLD->indexDS:
+// values[ HLD->indexDS[i] - 1 ] = nums[i-1]; if DS is 1 indexed
 // Each query in O(log n * C) where C is the time DS process queries
 // For custom queries/updates, call traversePath with custom lambda
 // 1-Indexed

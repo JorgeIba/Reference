@@ -8,8 +8,7 @@ struct Edge{
     lli to, flow, capacity;
     Edge* res;
     Edge(int to, lli capacity, lli cost = 0): to(to), flow(0), capacity(capacity) {}
-    void addFlow(lli flow)
-    {
+    void addFlow(lli flow){
         this->flow += flow;
         this->res->flow -= flow;
     }
@@ -28,8 +27,7 @@ struct Dinic{
         dist.resize(N);
     }
 
-    void addEdge(int u, int v, lli capacity, bool directed = false)
-    {
+    void addEdge(int u, int v, lli capacity, bool directed = false){
         Edge* uv = new Edge(v, capacity);
         Edge* vu = new Edge(u, directed?0:capacity); // change 0 for capacity if is undirected
         uv->res = vu;
@@ -38,26 +36,21 @@ struct Dinic{
         adjList[v].push_back(vu);
     }
 
-    lli BlockingFlow(int u, int t, lli flow)
-    {
+    lli BlockingFlow(int u, int t, lli flow){
         if(u == t) return flow;
-        for(int &i= pos[u]; i<(int)adjList[u].size(); i++ )
-        {
+        for(int &i= pos[u]; i<(int)adjList[u].size(); i++ ){
             Edge* E = adjList[u][i];
-            if(E->capacity > E->flow && dist[E->to] == dist[u] + 1)
-            {
+            if(E->capacity > E->flow && dist[E->to] == dist[u] + 1){
                 lli f = BlockingFlow(E->to, t, min(flow, E->capacity - E->flow));
-                if(f>0)
-                {
-                     E->addFlow(f); 
-                     return f;
+                if(f>0){
+                    E->addFlow(f);
+                    return f;
                 }
             }
         }
         return 0;
     }
-    bool bfs(int s, int t)
-    {
+    bool bfs(int s, int t){
         fill(all(dist), -1);
         queue<lli> q; q.push(s);
         dist[s] = 0;
@@ -76,14 +69,11 @@ struct Dinic{
         return dist[t] != -1;
     }
     
-    lli StartDinic(int s, int t)
-    {
+    lli StartDinic(int s, int t){
         lli maxFlow = 0;
-        for(limit = (scaling?1<<30:1); limit>0; limit>>=1) // (1<<30) is for maximum capacity = 10^9
-        {
+        for(limit = (scaling?1<<30:1); limit>0; limit>>=1){ // (1<<30) is for maximum capacity = 10^9
             dist[t] = 0;
-            while(bfs(s, t))
-            {
+            while(bfs(s, t)){
                 lli f = 0;
                 fill(all(pos), 0);
                 while((f = BlockingFlow(s, t, INF)))
@@ -99,13 +89,11 @@ struct Dinic{
     //Run dfs(S) and if U is part of T and is
     //visited, then is part of min-cut
     vector<bool> visited;
-    void dfs(int u, bool clearing = true) 
-    {
+    void dfs(int u, bool clearing = true) {
         if(clearing) visited.resize(N);
         if(visited[u]) return;
         visited[u] = true;
-        for(auto E: adjList[u])
-        {
+        for(auto E: adjList[u]){
             if(E->capacity == E->flow) continue;
             dfs(E->to, false);
         }

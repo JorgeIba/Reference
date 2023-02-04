@@ -90,7 +90,9 @@ struct Line {
 	bool operator<(const Line& o) const { return k < o.k; }
 	bool operator<(lli x) const { return p < x; }
 };
-
+// Works for maximum
+// If you want minimum, multiply m and b for -1, and 
+// multiply for -1 the query
 struct LineContainer : multiset<Line, less<>> {
 	// (for doubles, use INF = 1/.0, div(a,b) = a/b)
 	const lli INF = LLONG_MAX;
