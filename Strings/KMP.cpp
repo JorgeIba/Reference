@@ -33,8 +33,8 @@ vector<int> kmp(string text, string pattern){
 }
 /*
  * Returns an array of size |s| + 1, the i-th position of this array conains
- * the number of occurrences of preffix s[1,...,i] (1-based). Position 0
- * doesn't contain relevant information.
+ * the number of occurrences of preffix s[1,...,i] in the string s (1-based).
+ * Position 0 doesn't contain relevant information.
  */
 vector<int> number_of_occ_preff(string s) {
 	vector<int> pi = preffix_function(s);
@@ -47,4 +47,16 @@ vector<int> number_of_occ_preff(string s) {
 	for(int i = 0; i <= len; i++)
 		ans[i]++;
 	return ans;
+}
+/*
+ * This function returns the minimum length of a string that is the
+ * compression of the given string, for example, for string: abaabaaba this
+ * function returns 3
+ */
+int length_of_min_compression(string s) {
+	vector<int> pi = preffix_function(s);
+	int n = s.size();
+	int k = n - pi[n-1];
+	if(n % k == 0) return k;
+	return n;
 }
