@@ -7,7 +7,7 @@ struct Poly{
     Poly(int n, int value = 0): P(n, value) {}
     Poly(vector<T> A) {P = A;}
 
-    void normalize(){ while(!P.empty() && !P.back()) P.pop_back();} // get rid of leading zeroes
+    void normalize(){ while(P.size() > 1 && !P.back()) P.pop_back();} // get rid of leading zeroes
 
     inline int size() const{return P.size();}
     inline void resize(int n) {P.resize(n);}
@@ -68,6 +68,7 @@ struct Poly{
         for(int i = 0; i < SZ(ans); i++){
             ans[i] = mul(P[i], k);
         }
+        ans.normalize();
         return ans;
     }
 
@@ -202,12 +203,54 @@ struct Poly{
         return E;
     }
 
-    Poly sqrt()
-    {
+    Poly shift_left(int n) {
+        Poly A;
+        A.P.insert(A.P.begin(), P.begin() + n, P.end());
+        return A;
+    }
+
+    Poly shift_right(int n) {
+        Poly A(n);
+        A.P.insert(A.P.begin()+n, P.begin(), P.end());
+        return A;
+    }
+
+    // Use long long, luego hay pedos con el overflow
+    Poly pow(lli n, int coeffs = -1) {
+        if( coeffs < 0 ) coeffs = size();
+
+        if(n == 0){
+            Poly ANS(1,1);
+            ANS.resize(coeffs);
+            return ANS;
+        }
+
+        int t = 0;
+        while(t < size() && !P[t]) t++;
+
+        if(t == size() || t > coeffs / n) return Poly(coeffs, 0);
+
+        lli coeff_k = powerMod(P[t], n, p);
+        lli inv_coeff = powerMod(P[t], p-2, p);
+
+        Poly B = shift_left(t) * inv_coeff;
+        Poly B_ln = B.logn() * (n % p);
+
+        B_ln.resize(size() - n*t);
+        Poly B_k = (B_ln).exp();
+
+        Poly P_n = B_k.shift_right(n*t) * coeff_k;
+
+        return P_n;
+    }
+
+
+    Poly sqrt(int d = -1){
+        if(d == -1) d = SZ(P);
         T r0 = 1; //! r0^2 == P[0] mod p
         T inv2 = inv(2);
         Poly<T> R(1, r0); 
-        while(SZ(R) < SZ(P))
+        while(SZ(R) <= d)
         {
             int c = 2*SZ(R);
             R.resize(c);
@@ -217,10 +260,9 @@ struct Poly{
             for(int i = 0; i<c; i++)
                 R[i] = (R[i] + F[i])*inv2 % p;
         }
-        R.resize(SZ(P));
+        
         return R;
     }
-
 
     vector<Poly<T>> STM; //Segment Tree - Multiplying
     Poly multiMultiply(const vector<Poly<T>> &Polys)

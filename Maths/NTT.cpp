@@ -16,6 +16,30 @@ lli powerMod(lli a, lli b, lli mod){
 	}
 	return res;
 }
+
+
+// This speeds up mucho when NTT is used a lot
+
+/*
+lli wp[MAXLOG][MAXN], wp_inv[MAXLOG][MAXN];
+void prec_ntt() {
+    for(int i = 0, n = 1; i < MAXLOG; i++, n <<= 1) {
+        lli wk = powerMod(g, (p-1) / (n << 1), p);
+        lli wk_inv = powerMod(g, -1 * (p-1) / (n << 1), p);
+        wp[i][0] = 1;
+        wp_inv[i][0] = 1;
+        for(int j = 1; j < MAXN; j++){
+            wp[i][j] = wp[i][j-1] * wk % p;
+            wp_inv[i][j] = wp_inv[i][j-1] * wk_inv % p;
+        }
+    }
+}
+*/
+// You need to change this line
+// int u = A[i + j], v = (A[i+j+k] * (inv ? wp_inv[logg][j] : wp[logg][j] ) ) % p;
+// where logg = log2(k)
+
+
  
 template<int p, int g, typename T>
 void ntt(vector<T> & A, bool inv){ //O(n log n)
@@ -34,7 +58,7 @@ void ntt(vector<T> & A, bool inv){ //O(n log n)
 
 		for(int i = 0; i < n; i += k << 1){
 			for(int j = 0; j < k; ++j){
-				lli u = A[i + j], v = (A[i+j+k] * wp[j]) % p;
+				int u = A[i + j], v = (A[i+j+k] * wp[j]) % p;
 				A[i+j] = (u + v < p) ? u + v : u + v - p;
 				A[i+j+k] = (u - v >= 0) ? u - v: u - v + p;
 			}

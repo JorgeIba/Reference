@@ -9,8 +9,10 @@ Solve a canonical LP:
 	**A_i = a x_0 + b x_1 + ...
 	x >= 0
 
-    O(m*(n+m)), n = size of to_min, m = size of restr
-
+	Heuristics: O(SZ of Matrix), O(N^3)
+	If integers, round the value
+	Sometimes doubles are sufficient
+	El vasito implementation is faster
 */
 
 typedef vector<ld> Vec;
