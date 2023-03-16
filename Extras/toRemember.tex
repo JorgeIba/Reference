@@ -6,8 +6,10 @@
     
     Si $S_{n}^{k} = \sum_{i=1}^{n} i^k$ entonces: $S_{n}^{k} = \frac{ (n+1)^{k+1} - 1 - \sum_{j=0}^{k-1} {{k+1} \choose j} S_n^j }{ k+1 }$
 
-    A binomial coefficient ${\tbinom {m}{n}}$ is divisible by a prime p if and only if at least one of the base p digits of n is greater than the corresponding digit of m.
+    Lucas Theorem: A binomial coefficient ${\tbinom {m}{n}}$ is divisible by a prime p if and only if at least one of the base p digits of n is greater than the corresponding digit of m.
     In particular, ${\displaystyle {\tbinom {m}{n}}}$ is odd if and only if the binary digits (bits) in the binary expansion of n are a subset of the bits of m.
+
+    Wilson Theroem: Un número es primo si y sólo si $(n-1)! \equiv -1 \; (mod \; n)$
 
     ${\tbinom {n}{m}} = {\tbinom {n_0}{m_0}} {\tbinom {\lfloor \frac{n}{p} \rfloor }{\lfloor \frac{m}{p} \rfloor}}$ $n_0$ is $n$ modulo p and $m_0$ is $m$ modulo p.
 
@@ -37,4 +39,35 @@
         $gcd(F_m, F_n) = F_{gcd(m,n)}$
     \end{center}
 
+
+    Para usar 2SAT recuerda que:
+
+    \begin{center}
+        $x \lor y     \longrightarrow (\lnot x \implies y) \land (\lnot y \implies x)$
+
+        $x = 1        \longrightarrow (x \lor x)$
+
+        $x \oplus y   \longrightarrow (x \lor y) \land (\lnot x \lor \lnot y)$
+
+        $x = y        \longrightarrow (x \lor \lnot y) \land (\lnot x \lor y)$
+
+        A lo más uno:
+        $(\lnot x \lor \lnot y)$
+
+
+        DeMorgan's Law:
+        $\lnot (x \lor y)  = \lnot x \land \lnot y$
+
+        $\lnot (x \land y) = \lnot x \lor \lnot y$
+    \end{center}
+    
+    Hall's Theorem: Si tenemos un grafo bipartito con un lado X y del otro lado Y, supongamos que |X| <= |Y|. Al tomar un subconjunto S de X, denotamos a N(S) como los nodos en Y con aristas en S. Si para todo S \subseteq X, tenemos que N(S) >= S, entonces hay un emparejamiento que empareje a todo X.
+
+    Pell Equations ($x^2 - n y^2 = 1$): Remember that $(x^2 - n y^2)(a^2 - n b^2) = (xa + nyb)^2 - n(xb + ay)^2$, si haces esto donde $a$ y $b$ son las soluciones de los pasos "anteriores", tienes una recursión que genera todas las soluciones (en los enteros positivos).
+
+    Theorem Lam - Postnikov: The vertices of an alcoved polytope have only integer coordinates. An alcoved polytope es a polytope obtained by inequalities of the form:
+
+    $\alpha_{ij} \leq x_i + x_{i+1} + x_{i+2} + \cdots + x_j \leq \beta_{ij}$
+
+    Esto nos ayuda al momento de querer aplicar simplex, donde las inequaciones son "continuas" y cada $x_i \in \{0, 1\}$.
 }

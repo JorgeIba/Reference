@@ -1,12 +1,14 @@
 // Maximum Bipartite Matching O(nm)
+// Because is bipartite, you only need the adjList of the left nodes
+// Both left and right nodes are 0-indexed
 struct KuhnAlgo {
     int n, m;
     vector<int> left_to_right, right_to_left;
     vector<bool> visited;
     vector<vector<int>> adjListLeft;
 
-    // Left: 0, 1, ..., n
-    // Right: 0, 1, ..., m
+    // Left: 0, 1, ..., n-1
+    // Right: 0, 1, ..., m-1
     KuhnAlgo(int n, int m, const vector<vector<int>> &adjListLeft): n(n), m(m), adjListLeft(adjListLeft) {
         left_to_right.assign(n, -1);
         right_to_left.assign(m, -1);

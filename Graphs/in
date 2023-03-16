@@ -1,0 +1,388 @@
+diff --color "./Articulation Points And Bridges.cpp" "/home/eolmedo/Reference/Graphs/Articulation Points And Bridges.cpp"
+1,44c1,44
+< // 6
+< // APB = articulation points and bridges
+< // Ap = Articulation Point
+< // br = bridges, p = parent
+< // disc = discovery time
+< // low = lowTime, ch = children
+< // nup = number of edges from u to p
+< // 5
+< typedef pair<int, int> Edge;
+< int Time;
+< vector<vector<int>> adj;
+< vector<int> disc, low, isAp;
+< vector<Edge> br;
+< 
+< void init(int N) { adj.assign(N, vector<int>()); }
+< // 4
+< void addEdge(int u, int v) {
+<   adj[u].push_back(v);
+<   adj[v].push_back(u);
+< }
+< // 15
+< int dfsAPB(int u, int p) {
+<   int ch = 0, nup = 0;
+<   low[u] = disc[u] = ++Time;
+<   for (int &v : adj[u]) {
+<     if (v == p && !nup++) continue;
+<     if (!disc[v]) {
+<       ch++, dfsAPB(v, u);
+<       if (disc[u] <= low[v]) isAp[u]++;
+<       if (disc[u] < low[v]) br.push_back({u, v});
+<       low[u] = min(low[u], low[v]);
+<     } else
+<       low[u] = min(low[u], disc[v]);
+<   }
+<   return ch;
+< }
+< // 8
+< // O(N)
+< void APB() {
+<   br.clear();
+<   isAp = low = disc = vector<int>(adj.size());
+<   Time = 0;
+<   for (int u = 0; u < adj.size(); u++)
+<     if (!disc[u]) isAp[u] = dfsAPB(u, u) > 1;
+---
+> // 6
+> // APB = articulation points and bridges
+> // Ap = Articulation Point
+> // br = bridges, p = parent
+> // disc = discovery time
+> // low = lowTime, ch = children
+> // nup = number of edges from u to p
+> // 5
+> typedef pair<int, int> Edge;
+> int Time;
+> vector<vector<int>> adj;
+> vector<int> disc, low, isAp;
+> vector<Edge> br;
+> 
+> void init(int N) { adj.assign(N, vector<int>()); }
+> // 4
+> void addEdge(int u, int v) {
+>   adj[u].push_back(v);
+>   adj[v].push_back(u);
+> }
+> // 15
+> int dfsAPB(int u, int p) {
+>   int ch = 0, nup = 0;
+>   low[u] = disc[u] = ++Time;
+>   for (int &v : adj[u]) {
+>     if (v == p && !nup++) continue;
+>     if (!disc[v]) {
+>       ch++, dfsAPB(v, u);
+>       if (disc[u] <= low[v]) isAp[u]++;
+>       if (disc[u] < low[v]) br.push_back({u, v});
+>       low[u] = min(low[u], low[v]);
+>     } else
+>       low[u] = min(low[u], disc[v]);
+>   }
+>   return ch;
+> }
+> // 8
+> // O(N)
+> void APB() {
+>   br.clear();
+>   isAp = low = disc = vector<int>(adj.size());
+>   Time = 0;
+>   for (int u = 0; u < adj.size(); u++)
+>     if (!disc[u]) isAp[u] = dfsAPB(u, u) > 1;
+Only in /home/eolmedo/Reference/Graphs: Centroid Decomposition.cpp
+Only in .: Dominator_Tree.cpp
+Only in /home/eolmedo/Reference/Graphs: Eulerian Path.cpp
+Common subdirectories: ./Flow and /home/eolmedo/Reference/Graphs/Flow
+Only in .: in
+diff --color ./LCA.cpp /home/eolmedo/Reference/Graphs/LCA.cpp
+1,68c1,68
+< 
+< 
+< struct LCA_T{
+<     const static int maxLOG = 18;
+<     int n;
+<     vector<int> depth, order;    
+< 
+<     vector< vector<int> > ancestors;
+<     // uncomment if you wanna get minimum between paths
+<     // vector< vector<int> > min_ancestors; 
+< 
+<     template<class G>
+<     LCA_T(int n, const G &adjList, int root = 1): n(n), depth(n) {
+<         ancestors.assign(n, vector<int>(maxLOG));
+<         for(int i = 0; i < n; i++) ancestors[i][0] = i;
+< 
+<         // min_ancestors.assign(n, vector<int>(maxLOG));
+< 
+<         dfs(root, adjList, 0);
+<         prec();
+<     }
+< 
+< 
+<     template<class G>
+<     void dfs(int u, const G &adjList, int p = -1) {
+<     
+<         order.push_back(u);
+<         for(auto v: adjList[u]){
+<             if(v == p) continue;
+< 
+<             ancestors[v][0] = u;
+<             depth[v] = depth[u] + 1;
+<             // Add here if queries of min, sum, etc.
+< 
+<             dfs(v, adjList, u);
+<         }
+<     }
+< 
+<     void prec() {
+<         for(auto u: order) 
+<             for(int i = 1; i < maxLOG; i++) 
+<                 ancestors[u][i] = ancestors[ ancestors[u][i-1] ][i-1];
+<                 // Add here if queries of min, sum, etc
+<         order.clear();
+<     }
+< 
+<     int get_kth_parent(int u, int k){
+<         for(int i = maxLOG - 1; i >= 0; i--) 
+<             if(k & (1 << i))
+<                 u = ancestors[u][i];
+< 
+<         return u;
+<     }
+< 
+<     int get_lca(int u, int v) {
+<         if(depth[u] > depth[v]) swap(u, v);
+<         v = get_kth_parent(v, depth[v] - depth[u]);
+< 
+<         for(int i = maxLOG-1; i >= 0; i--) {
+<             if(ancestors[u][i] != ancestors[v][i]) {
+<                 u = ancestors[u][i];
+<                 v = ancestors[v][i];
+<             }
+<         }
+<         return u != v ? ancestors[u][0] : u;
+<     }
+< };
+< 
+---
+> 
+> 
+> struct LCA_T{
+>     const static int maxLOG = 18;
+>     int n;
+>     vector<int> depth, order;    
+> 
+>     vector< vector<int> > ancestors;
+>     // uncomment if you wanna get minimum between paths
+>     // vector< vector<int> > min_ancestors; 
+> 
+>     template<class G>
+>     LCA_T(int n, const G &adjList, int root = 1): n(n), depth(n) {
+>         ancestors.assign(n, vector<int>(maxLOG));
+>         for(int i = 0; i < n; i++) ancestors[i][0] = i;
+> 
+>         // min_ancestors.assign(n, vector<int>(maxLOG));
+> 
+>         dfs(root, adjList, 0);
+>         prec();
+>     }
+> 
+> 
+>     template<class G>
+>     void dfs(int u, const G &adjList, int p = -1) {
+>     
+>         order.push_back(u);
+>         for(auto v: adjList[u]){
+>             if(v == p) continue;
+> 
+>             ancestors[v][0] = u;
+>             depth[v] = depth[u] + 1;
+>             // Add here if queries of min, sum, etc.
+> 
+>             dfs(v, adjList, u);
+>         }
+>     }
+> 
+>     void prec() {
+>         for(auto u: order) 
+>             for(int i = 1; i < maxLOG; i++) 
+>                 ancestors[u][i] = ancestors[ ancestors[u][i-1] ][i-1];
+>                 // Add here if queries of min, sum, etc
+>         order.clear();
+>     }
+> 
+>     int get_kth_parent(int u, int k){
+>         for(int i = maxLOG - 1; i >= 0; i--) 
+>             if(k & (1 << i))
+>                 u = ancestors[u][i];
+> 
+>         return u;
+>     }
+> 
+>     int get_lca(int u, int v) {
+>         if(depth[u] > depth[v]) swap(u, v);
+>         v = get_kth_parent(v, depth[v] - depth[u]);
+> 
+>         for(int i = maxLOG-1; i >= 0; i--) {
+>             if(ancestors[u][i] != ancestors[v][i]) {
+>                 u = ancestors[u][i];
+>                 v = ancestors[v][i];
+>             }
+>         }
+>         return u != v ? ancestors[u][0] : u;
+>     }
+> };
+> 
+diff --color "./Maximum Bipartite Matching - Kuhn.cpp" "/home/eolmedo/Reference/Graphs/Maximum Bipartite Matching - Kuhn.cpp"
+2,3d1
+< // Because is bipartite, you only need the adjList of the left nodes
+< // Both left and right nodes are 0-indexed
+10,11c8,9
+<     // Left: 0, 1, ..., n-1
+<     // Right: 0, 1, ..., m-1
+---
+>     // Left: 0, 1, ..., n
+>     // Right: 0, 1, ..., m
+Common subdirectories: ./Shortest Paths and /home/eolmedo/Reference/Graphs/Shortest Paths
+diff --color "./Topological Sort.cpp" "/home/eolmedo/Reference/Graphs/Topological Sort.cpp"
+1,69c1,69
+< // 3
+< // vis = visited
+< vector<vector<int>> adj;
+< vector<int> vis, toposorted;
+< // 4
+< void init(int N) {
+<   adj.assign(N, vector<int>());
+<   vis.assign(N, 0), toposorted.clear();
+< }
+< 
+< void addEdge(int u, int v) { adj[u].push_back(v); }
+< // 12
+< // returns false if there is a cycle
+< // O(E)
+< bool toposort(int u) {
+<   vis[u] = 1;
+<   for (auto &v : adj[u])
+<     if (v != u && vis[v] != 2 &&
+<         (vis[v] || !toposort(v)))
+<       return false;
+<   vis[u] = 2;
+<   toposorted.push_back(u);
+<   return true;
+< }
+< // 6
+< // O(V + E)
+< bool toposort() {
+<   for (int u = 0; u < adj.size(); u++)
+<     if (!vis[u] && !toposort(u)) return false;
+<   return true;
+< }
+< 
+< 
+< 
+< vector<int> toposort_bfs(vector<vector<int>> &adjList){
+<     int n = adjList.size();
+<     vector<int> incoming_edges(n);
+< 
+<     for(int i = 0; i < n; i++)
+<         for(auto v: adjList[i])
+<             incoming_edges[v]++;
+< 
+<     queue<int> q;
+<     for(int i = 0; i < n; i++){
+<         if(incoming_edges[i] == 0) q.push(i);        
+<     }
+< 
+<     int cnt = 0;
+<     vector<int> ans;
+<     while(!q.empty()){
+<         int u = q.front(); q.pop();
+< 
+<         ans.push_back(u);
+<         cnt++;
+< 
+<         for(auto v: adjList[u]){
+<             incoming_edges[v]--;
+< 
+<             if(incoming_edges[v] == 0){
+<                 q.push(v);
+<             }
+<         }
+<     }
+< 
+<     //HAY UN CICLO
+<     if(cnt != n) return {-1};
+< 
+<     return ans;
+< }
+---
+> // 3
+> // vis = visited
+> vector<vector<int>> adj;
+> vector<int> vis, toposorted;
+> // 4
+> void init(int N) {
+>   adj.assign(N, vector<int>());
+>   vis.assign(N, 0), toposorted.clear();
+> }
+> 
+> void addEdge(int u, int v) { adj[u].push_back(v); }
+> // 12
+> // returns false if there is a cycle
+> // O(E)
+> bool toposort(int u) {
+>   vis[u] = 1;
+>   for (auto &v : adj[u])
+>     if (v != u && vis[v] != 2 &&
+>         (vis[v] || !toposort(v)))
+>       return false;
+>   vis[u] = 2;
+>   toposorted.push_back(u);
+>   return true;
+> }
+> // 6
+> // O(V + E)
+> bool toposort() {
+>   for (int u = 0; u < adj.size(); u++)
+>     if (!vis[u] && !toposort(u)) return false;
+>   return true;
+> }
+> 
+> 
+> 
+> vector<int> toposort_bfs(vector<vector<int>> &adjList){
+>     int n = adjList.size();
+>     vector<int> incoming_edges(n);
+> 
+>     for(int i = 0; i < n; i++)
+>         for(auto v: adjList[i])
+>             incoming_edges[v]++;
+> 
+>     queue<int> q;
+>     for(int i = 0; i < n; i++){
+>         if(incoming_edges[i] == 0) q.push(i);        
+>     }
+> 
+>     int cnt = 0;
+>     vector<int> ans;
+>     while(!q.empty()){
+>         int u = q.front(); q.pop();
+> 
+>         ans.push_back(u);
+>         cnt++;
+> 
+>         for(auto v: adjList[u]){
+>             incoming_edges[v]--;
+> 
+>             if(incoming_edges[v] == 0){
+>                 q.push(v);
+>             }
+>         }
+>     }
+> 
+>     //HAY UN CICLO
+>     if(cnt != n) return {-1};
+> 
+>     return ans;
+> }
+Only in /home/eolmedo/Reference/Graphs: Two Sat.cpp

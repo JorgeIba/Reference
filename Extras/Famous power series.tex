@@ -1,13 +1,24 @@
 {\normalsize
     \begin{itemize}
-    	\item $\exp(x) = 1 + x + \dfrac{x^2}{2!} + \dfrac{x^3}{3!} + \cdots$
+    	\item $e^x = 1 + x + \dfrac{x^2}{2!} + \dfrac{x^3}{3!} + \cdots$
+    	\item $cos(x) = 1 - \dfrac{x^2}{2!} + \dfrac{x^4}{4!} - \dfrac{x^6}{6!} + \cdots$
+    	\item $cosh(x) = 1 + \dfrac{x^2}{2!} + \dfrac{x^4}{4!} + \dfrac{x^6}{6!} + \cdots$
+    	\item $sin(x) = x - \dfrac{x^3}{3!} + \dfrac{x^5}{5!} - \dfrac{x^7}{7!} + \cdots$
+    	\item $sinh(x) = x + \dfrac{x^3}{3!} + \dfrac{x^5}{5!} + \dfrac{x^7}{7!} + \cdots$
     	\item $\dfrac{1}{1-x} = 1 + x + x^2 + x^3 + \cdots$
     	\item $\dfrac{1}{1+x} = 1 - x + x^2 - x^3 + \cdots$
     	\item $\ln(1+x) = x - \dfrac{x^2}{2} + \dfrac{x^3}{3} - \dfrac{x^4}{4} + \cdots$
     	\item $\ln(1-x) = -x - \dfrac{x^2}{2} - \dfrac{x^3}{3} - \dfrac{x^4}{4} - \cdots$
+    	\item $\ln(\frac{1}{1-x}) = x + \frac{x^2}{2} + \frac{x^3}{3} + \frac{x^4}{4} + \frac{x^5}{5} + \cdots$
+    	\item $\frac{1}{(1-x)^{k+1}} = \sum_n \dbinom{n+k}{n} x^n$
+    	\item $tan^{-1}(x) = \sum_{n \geq 0} (-1)^n \frac{x^{2n+1}}{2n+1}$
+    	\item $\frac{1}{\sqrt{1-4x}} = \sum_{k} \dbinom{2k}{k} x^k$
     	\item $\displaystyle (1+x)^n = \sum_{k=0}^{n} \binom{n}{k} x^k$ , $\quad n \in \mathbb{N}$
     	\item $\displaystyle (1+x)^\alpha = 1 + \dfrac{\alpha}{1!} x + \dfrac{\alpha(\alpha-1)}{2!} x^2 + \dfrac{\alpha(\alpha-1)(\alpha-2)}{3!} x^3 + \cdots$ , $\quad \alpha \in \mathbb{R}$
     	\item $\displaystyle \dfrac{1}{(1-x)^k} = \sum_{n=0}^{\infty} \binom{n+k-1}{k-1} x^n$ , $\quad k \in \mathbb{N}$
     	\item $\displaystyle S_p(n) = \sum_{k=1}^n k^p$ then: $\displaystyle \sum_{p=0}^\infty \frac{S_p(n)}{p!}x^p = \frac{ \frac{e^{x(n+1)} - e^x}{x} }{\frac{e^x-1}{x}}$
     \end{itemize} 
+
+
+	Remember that: $cosh(x) = \frac{e^x + e^{-x}}{2}$ and $sinh(x) = \frac{e^x - e^{-x}}{2}$ and $cosh^2(x) - sinh^2(x) = 1$
 }

@@ -26,29 +26,35 @@ T kthTermLinearRecurrence(const vector<T> &initial, const vector<T> &constants, 
 
 
 /*
-    O( N^2 log(K) )
+    O( d^2 log(n) )
 	0 - Indexed
+	C_n = init[0] * P[d-1] + init[1] * P[d-2] + ... + init[d-1]*P[0]
+	If uses polynomio, initialize with vector of size 1 at least
 */
-lli kthTermLinearRecurrence(const vector<lli> & P, const vector<lli> & init, lli n){
+template<typename T>
+T kthTermLinearRecurrence(const vector<T> & P, const vector<T> & init, lli n){
+
 	int deg = P.size();
-	vector<lli> ans(deg), R(2*deg);
-	ans[0] = 1;
+	vector<T> ans(deg), R(2*deg);
+    ans[0] = 1; // Multiplicative Neutro
+
 	lli p = 1;
 	for(lli v = n; v >>= 1; p <<= 1);
 	do{
 		int d = (n & p) != 0;
-		fill(R.begin(), R.end(), 0);
+		fill(R.begin(), R.end(), T());
 		for(int i = 0; i < deg; i++)
 			for(int j = 0; j < deg; j++)
-				(R[i + j + d] += ans[i] * ans[j]) %= MOD;
+				R[i + j + d] = (R[i + j + d] + ans[i] * ans[j]);
 		for(int i = deg-1; i >= 0; i--)
 			for(int j = 0; j < deg; j++)
-				(R[i + j] += R[i + deg] * P[j]) %= MOD;
+				R[i + j] = (R[i + j] +  R[i + deg] * P[j]);
+
 		copy(R.begin(), R.begin() + deg, ans.begin());
 	}while(p >>= 1);
-	lli nValue = 0;
+
+	T nValue = T();
 	for(int i = 0; i < deg; i++)
-		(nValue += ans[i] * init[i]) %= MOD;
+		nValue = (nValue +  ans[i] * init[i]);
 	return nValue;
 }
- 

@@ -37,10 +37,19 @@ void prec_ntt() {
 */
 // You need to change this line
 // int u = A[i + j], v = (A[i+j+k] * (inv ? wp_inv[logg][j] : wp[logg][j] ) ) % p;
+// comment these:
+// 
+/*
+	vector<lli> wp(n>>1, 1);
+
+	lli wk = powerMod(g, (inv?-1:1) * (p - 1) / (k<<1), p);
+	for(int j = 1; j < k; ++j)
+		wp[j] = (wp[j - 1] * wk) % p;
+*/
 // where logg = log2(k)
+// so change for(int k = 1, logg = 0; k < n; k <<= 1, logg++){
 
 
- 
 template<int p, int g, typename T>
 void ntt(vector<T> & A, bool inv){ //O(n log n)
 	int n = SZ(A);

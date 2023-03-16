@@ -41,3 +41,29 @@ long computeXORFromAToB(int a, int b)
 {
     return computeXOR(a) ^ computeXOR(b);
 }
+
+
+vector<int> dp_sos(const vector<int> &A, int N) {
+    vector<int> dp(1 << N);
+
+    for(int mask = 0; mask < (1 << N); mask++)
+        dp[mask] = A[mask];
+
+    for(int i = 0; i < N; i++) {
+        for(int mask = 0; mask < (1 << N); mask++){
+            if(~mask & (1 << i))
+                dp[mask ^ (1 << i)] += dp[mask];
+        }
+    }
+
+    /*
+        for(mask = 0; mask < (1 << N); mask++){
+            sum = 0;
+            for(submask of mask)
+                sum += A[submask];
+            dp[mask] = sum;
+        }
+    */
+
+    return dp;
+}

@@ -1,21 +1,64 @@
-//10
-vector<lli> BIT(MAXN+1);
-void update(lli idx, lli value)
-{
-    while(idx < BIT.size())
-    {
-        BIT[idx] += value;
-        idx += idx&(-idx);
+struct Fenwick {
+  vector<long long> tree;
+  int n;
+
+  void init(int _n) {
+    n = _n;
+    tree.resize(n+1, 0);
+    for (int i = 0 ; i <= n ; i++) {
+      tree[i] = 0;
     }
-}
-//10
-lli sum(lli idx)
-{
-    lli res = 0;
-    while(idx)
-    {
-        res += BIT[idx];
-        idx -= idx&(-idx);
+  }
+
+  void update(int idx, long long val) {
+    for (; idx <= n ; idx += idx & -idx) {
+      tree[idx] += val;
     }
-    return res;
-}
+  }
+
+  long long query(int idx) {
+    long long ret = 0;
+    while (idx > 0) {
+      ret += tree[idx];
+      idx -= idx & -idx;
+    }
+    return ret;
+  }
+
+  long long query(int x, int y) {
+    return query(y) - query(x-1);
+  }
+};
+
+
+
+// query(l, r) -> sum[l, ..., r]
+// update(l, r, v)-> sum[l, ..., r] + v
+template<typename T>
+struct FenwickTree{
+	int n;
+    vector< vector<T> > bit;
+
+    FenwickTree(int n): n(n) {
+        bit.assign(2, vector<T>(n+10));
+    }
+
+	T get(int x, int i) {
+		T ret = 0;
+		for (; i; i -= i&-i) ret += bit[x][i];
+		return ret;
+	}
+	void add(int x, int i, T val) {
+		for (; i <= n; i += i&-i) bit[x][i] += val;
+	}
+	T get2(int p) {
+		return get(0, p) * p + get(1, p);
+	}
+	T query(int l, int r) {
+		return get2(r+1) - get2(l);
+	}
+	void update(int l, int r, T x) {
+		add(0, l+1, x), add(0, r+2, -x);
+		add(1, l+1, -x*l), add(1, r+2, x*(r+1));
+	}
+};
