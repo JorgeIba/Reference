@@ -1,36 +1,4 @@
-\documentclass[12pt, twoside]{article}
-\usepackage[utf8]{inputenc}
-\usepackage[english]{babel}
-\usepackage{hyperref}
-\usepackage{filecontents}
-\usepackage{amssymb, amsmath, amsbsy}
-\usepackage{amsfonts}
-\usepackage{multirow,array}
-\usepackage{enumerate, multicol}
-\usepackage{amssymb}
-\usepackage{lscape}
-\usepackage{float}
-\usepackage{graphicx}
-\usepackage{fancyhdr}
-\usepackage{booktabs}
-\usepackage{verbatim}
-\usepackage{siunitx}
-\usepackage{cite}
-\usepackage{cancel}
-\usepackage{longtable}
-\usepackage{algpseudocode}
-\usepackage{algorithm}
-\usepackage{tikz}
-\usepackage{xcolor}
-\usepackage{tcolorbox}
-\usepackage{colortbl}
-\usepackage{caption}
-\usepackage{enumitem}
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.18}
-
-
-\begin{document}
+{\normalsize
   \textbf{Suffix Automaton} \\
   \textbf{Number of times a substring appears in a string} We can calculate
   the number of times a string appears in a Suffix Automaton with the next dp:
@@ -64,5 +32,171 @@
   the $j$-th state ($G[i][j]$). Then in another DP $T[i][j]$ we will store how
   many times a the pattern appears in the $i$-th recursive string starting in
   the $j$-th state.
-\end{document}
 
+  \textbf{Stirling's numbers of first kind}
+  \begin{center}
+    \begin{tabular} {|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+      \hline
+       n/k & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+       \hline
+        0  & 1 &   &   &   &  &   &   &   &    &   &   \\
+       \hline
+        1  & 0 & 1  &   &   &  &   &   &   &    &   &   \\
+       \hline
+        2  & 0 & 1  & 1 &   &  &   &   &   &    &   &   \\
+       \hline
+        3  & 0 & 2  & 3 & 1 &  &   &   &   &    &   &   \\
+       \hline
+        4  & 0 & 6  & 11 & 6 & 1 &   &   &   &    &   &   \\
+       \hline
+        5  & 0 & 24  & 50 & 35 & 10 &  1 &   &   &    &   &   \\
+       \hline
+        6  & 0 & 120  & 274 & 225 & 85 &  15 & 1  &   &    &   &   \\
+       \hline
+        7  & 0 & 720  & 1764 & 1624 & 735 &  175 & 21  & 1 &    &   &   \\
+       \hline
+        8  & 0 & 5040  & 13068 & 13132 & 6769 &  1960 & 322  & 28 & 1  &   &   \\
+       \hline
+        9  & 0 & 40320  & 109584 & 118124 & 67284 &  22449 & 4536  & 546 & 36  &
+        1&   \\
+       \hline
+        10  & 0 & 362880  & 1026576 & 1172700 & 723680 &  269325 & 63273  & 9450
+            & 870  & 45 &  1 \\
+        \hline
+    \end{tabular}
+  \end{center}
+  \textbf{Stirling's numbers of second kind}
+  \begin{center}
+    \begin{tabular} {|c|c|c|c|c|c|c|c|c|c|c|c|c|}
+      \hline
+       n/k & 0 & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 \\
+       \hline
+        0  & 1 &   &   &   &  &   &   &   &    &   &   \\
+       \hline
+        1  & 0 & 1  &   &   &  &   &   &   &    &   &   \\
+       \hline
+        2  & 0 & 1  & 1 &   &  &   &   &   &    &   &   \\
+       \hline
+        3  & 0 & 1  & 3 & 1 &  &   &   &   &    &   &   \\
+       \hline
+        4  & 0 & 1  & 7 & 6 & 1 &   &   &   &    &   &   \\
+       \hline
+        5  & 0 & 1  & 15 & 25 & 10 &  1 &   &   &    &   &   \\
+       \hline
+        6  & 0 & 1  & 31 & 90 & 65 &  15 & 1  &   &    &   &   \\
+       \hline
+        7  & 0 & 1  & 63 & 301 & 350 &  140 & 21  & 1 &    &   &   \\
+       \hline
+        8  & 0 & 1  & 127 & 966 & 1701 & 1050 &  266  & 28 & 1  &   &   \\
+       \hline
+        9  & 0 & 1  & 255 & 3025 & 7770 &  6951 & 2646  & 462 & 36  &
+        1&   \\
+       \hline
+        10  & 0 & 1  & 511 & 9330 & 34105 & 42525 & 22827  & 5880
+            & 750  & 45 &  1 \\
+        \hline
+    \end{tabular}
+  \end{center}
+
+  \textbf{Teorema de König} El Teorema de Köning nos dice que el tamaño de la
+  cobertura mínima de nodos es igual al máximo emparejamiento en un grafo bipartito, por lo tanto, la solución consiste en hallar el máximo emparejamiento bipartito en el grafo.
+
+  \textbf{Reconstrucción} La respuesta consiste en marcar los nodos que son
+  alcanzables desde $s$ utilizando caminos residuales (es decir, caminos que
+  pasan por aristas donde el flujo es menor a la capacidad en la red residual
+  que queda después de haber ejecutado un algoritmo de flujo máximo en la
+  red). Los nodos que pertenecen a la cobertura mínima de nodos son:
+  \begin{itemize}
+    \item Sea $l \in L$, si $l$ \textbf{no} es alcanzable desde $s$, entonces
+      pertenece al cubrimiento mínimo de nodos.
+    \item Sea $r \in R$, si $r$ \textbf{sí} es alcanzable desde $s$, entonces
+      pertenece al cubrimiento máximo de nodos.
+\end{itemize}
+
+  \textbf{El minimum vertex cover es el complemnto del maximum independent
+  set}
+
+  \textbf{Selección de proyectos (project selection)}
+
+  \textbf{Problema}
+
+  Tenemos $N$ propuestas de proyectos y $M$ máquinas. El $i$-ésimo proyecto
+  nos daría una ganacia $a_i$ y comprar la $j$-ésima máquina nos generaría un
+  costo $b_j$. Para completar cada proyecto necesitamos comprar un conjunto de
+  máquinas. Si dos o más proyectos necesitan la misma máquina, se puede
+  compartir entre los diferentes proyectos. ¿Cuál es el mayor beneficio que
+  podemos obtener?
+
+  \textbf{Solución}
+
+  La solución consiste en modelar este problema en términos del corte mínimo.
+  Construyamos un grafo bipartito con $N+M+2$ nodos:
+
+  \begin{itemize}
+    \item $2$ nodos especiales $s$ y $t$.
+    \item $N$ nodos, uno para cada proyecto, númerados $p_1, p_2, \dots, p_N$.
+    \item $M$ nodos, uno para cada máquina, númerados $m_1, m_2, \dots, m_M$.
+  \end{itemize}
+
+Y dibujemos aristas de la siguiente forma:
+
+\begin{itemize}
+  \item Una arista con peso $a_i$ dirigida de $s$ a $p_i$.
+  \item Una arista con peso $b_i$ dirigida de $m_j$ a $t$.
+  \item Una arista con peso $\infty$ de $p_i$ a $m_i$ si necesitamos comprar
+    la máquina $m_i$ para completar el proyect $p_i$.
+\end{itemize}
+
+  Ahora hallemos el mínimo corte de $s$ a $t$, al cual llamaremos $mincut$. El
+  mayor beneficio que podemos obtener es es $\sum_{i=1}^{N}a_i-mincut$. Por el
+  teorema Min-cut Max-flow, este corte mínimo es igual al flujo máximo de
+  $s$ a $t$.
+
+\textbf{Reconstrucción de la respuesta}
+
+  Primero hallemos las aristas que pertenecen al corte mínimo. La respuesta está definida de la siguiente forma:
+  \begin{itemize}
+    \item Si la arista dirigida de $s$ a $p_i$ \textbf{no} está en el corte mínimo, es óptimo completar el proyecto $p_i$.
+    \item Si la arista dirigida de $m_j$ a $t$ \textbf{sí} está en el corte mínimo, es necesario comprar la máquina $m_j$.
+  \end{itemize}
+
+  \textbf{Ploblema de la clausura (closure problem)}
+
+  \textbf{Definiciones}
+
+  \textbf{Clausura en teoría de grafos}
+
+    Dado un grafo dirigido $G=(V,E)$, definimos a una clausura $C$ como un
+    subconjunto de $V$, tal que para todas las aristas $(u,v)$ donde
+    $u \in C$, se cumple que $v \in C$. Es decir, todas las aristas que salen
+    de un nodo en $C$ están dirigidas a otro nodo en $C$.
+
+    \textbf{Problema}
+    Dado un grafo \textbf{dirigido y ponderado en los nodos} $G=(V,E)$,
+    hallar la clausura $C$ que máximice el peso de los nodos que pertenecn
+    a $C$.
+
+    \textbf{Solución}
+    Hay que notar que si un nodo $u$ está en la clausura $C$, entonces todos
+    los nodos $v$, tal que existe un camino de $u$ a $v$, deben estar en $C$.
+    La solución consiste en aprovechar esta propiedad y modelar el problema
+    de la clausura como un problema de selección de proyectos.
+
+  Construiremos una red de flujo como en el problema de selección de proyectos,
+  donde los nodos con costo positivo serán los proyectos y los nodos con costo
+  negativo serán las máquinas. Si existe un camino de un nodo $u$ con costo
+  \textbf{positivo} a un nodo $v$ con costo \textbf{negativo}, entonces diremos
+  que $u$ depende de $v$ y pondremos una arista de $u$ a $v$ en la red de
+  flujos.
+
+  La respuesta será el máximo flujo en esta red.
+
+  \textbf{Reconstrucción de la respuesta}
+
+  La respuesta se reconstruye igual que en el problema de selección de
+  proyectos.
+
+  \textbf{Maximal clique} El maximal clique de un grafo \textbf{no dirigido}
+  es igual a encontrar el maximal independent set el complemento del grafo (en
+  donde no hay aristas pones aristas y viceversa).
+}
