@@ -1,0 +1,68 @@
+\documentclass[12pt, twoside]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{hyperref}
+\usepackage{filecontents}
+\usepackage{amssymb, amsmath, amsbsy}
+\usepackage{amsfonts}
+\usepackage{multirow,array}
+\usepackage{enumerate, multicol}
+\usepackage{amssymb}
+\usepackage{lscape}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{verbatim}
+\usepackage{siunitx}
+\usepackage{cite}
+\usepackage{cancel}
+\usepackage{longtable}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\usepackage{colortbl}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+
+\begin{document}
+  \textbf{Suffix Automaton} \\
+  \textbf{Number of times a substring appears in a string} We can calculate
+  the number of times a string appears in a Suffix Automaton with the next dp:
+  \begin{align*}
+    dp[u] = \sum_{v}{dp[v]} + isAcState[u]
+  \end{align*}
+  \textbf{Largest common substring of a set of strings} This can be done by
+  concatenating all the strings separated by a special character, distinct for
+  each string. Then we can with a dfs and Dynamic programming to see which
+  special characters can be reached from a certain state without going through
+  special characters.
+
+  \textbf{Total length of all different substrings} For this we will need 2
+  dp's, $d[v]$ will store the number of different substrings (count paths) and
+  $ans[v]$ the total length of this substrings
+  \begin{align*}
+    dp[u] = \sum_{v} dp[v] \\
+    ans[u] = \sum_{v} d[v] + ans[v]
+  \end{align*}
+
+  \textbf{Lexicographical smallest shift} Take $S + S$ and build its
+  automaton, then we have to find the lexicographical smallest path of size
+  $|S|$
+
+  \textbf{Automaton with preffix function}\\
+  It's useful to calculate operations on strings which are created
+  recursively. For example if we want to calculate the number of times a
+  certain pattern appears in a recursive string we can calculate the automaton
+  for the pattern, and then use two DP's. One will store the value of the
+  preffix functionafter processing the $i$-th recursive string and being in
+  the $j$-th state ($G[i][j]$). Then in another DP $T[i][j]$ we will store how
+  many times a the pattern appears in the $i$-th recursive string starting in
+  the $j$-th state.
+\end{document}
+
