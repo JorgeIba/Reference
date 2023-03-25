@@ -44,8 +44,9 @@ void phiSieve(int n)
 				Phi[j] -= Phi[j] / i;
 }
 
-//35
-vector<lli> sieveMulFunction(lli n)
+//34
+template<class Fun>
+vector<lli> sieveMulFunction(lli n, Fun g)
 {
     vector<lli> primes, lp(n+1), f(n+1), cnt(n+1), pot(n+1);
     f[1] = 1;
@@ -60,13 +61,13 @@ vector<lli> sieveMulFunction(lli n)
             if(d>n) break;
             lp[d] = p;
             if(p == lp[i]){ // lowestPrime[i] == p
-                f[d] = f[ i/pot[i] ] * g(p,cnt[i]+1);
+                f[d] = f[ i/pot[i] ] * g(p,cnt[i]+1); // MOD
                 pot[d] = pot[i]*p;
                 cnt[d] = cnt[i]+1;
                 break;
             }
             else{ //Coprimes
-                f[d] = f[i]*f[p];
+                f[d] = f[i]*f[p]; // MOD
                 pot[d] = p;
                 cnt[d] = 1;
             }
