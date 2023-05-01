@@ -18,6 +18,7 @@ struct RollingHash
         hash = (hash - oldErase*magic)%mod;
         if(hash<0) hash += mod;
         magic = (magic*inverse_p)%mod;
+        curr.pop_front();
         return oldErase;
     }
 
