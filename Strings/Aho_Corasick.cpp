@@ -30,6 +30,7 @@ int getFail (int u, int c) {
 }
 
 void build () {
+	finish[0] = -1;
 	queue<int> q;
 
 	for (int i = 0; i < 26; i++)
@@ -43,7 +44,7 @@ void build () {
 		for (int i = 0; i < SIG; i++) {
 			int v = nex[u][i];
 
-			if (v) {
+			if (v && u) {
 				fail[v] = getFail(fail[u], i);
 				cnt[v] += cnt[fail[v]];
 				q.push(v);
@@ -52,7 +53,7 @@ void build () {
 				// Complejidad de esta parte O(sqrt(n))
 				out[v] = fail[v];
 				if (finish[out[v]] == -1)
-					out[v] = fail[out[v]];
+					out[v] = out[fail[v]];
 				// </comentar>
 			}
 		}
