@@ -56,14 +56,16 @@ struct SegmentTreeItLazy{ // 0 - indexed
 		build(ll), build(rr);
 	}
 	T query(int l, int r){
-		push(l += size), push(r += size);
-		T res = neutro;
-		for (; l <= r; l >>= 1, r >>= 1){
-			if (l & 1) res = merge(res, st[l++]);
-			if (~r & 1) res = merge(res, st[r--]);
-		}
-		return res;
-	}
+                T ansL = neutro;
+        	T ansR = neutro;
+                push(l += size);
+                push(r += size);
+                for (; l <= r; l >>= 1, r >>= 1){
+                        if (l & 1) ansL = merge(ansL, st[l++]);
+                        if (~r & 1) ansR = merge(st[r--], ansR);
+                }
+                return merge(ansL, ansR);
+        }
 	T& operator[](int i) { push(i+size); return st[i + size]; }
 	T set(S x){
 		return x;
