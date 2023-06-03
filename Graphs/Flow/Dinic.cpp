@@ -98,7 +98,7 @@ struct Dinic{
         return maxFlow;
     }
 
-    //To found if a edge is part of min-cut
+    //To found if an edge is part of min-cut
     //Run dfs(S) and if U is part of T and is
     //visited, then is part of min-cut
     vector<bool> visited;
