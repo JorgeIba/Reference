@@ -1,0 +1,29 @@
+{\normalsize
+    La secuencia de Prüfer es una secuencia única asociada a un árbol etiquetado. Si un árbol tiene $n$ nodos entonces la secuencia de Prüfer de ese árbol tiene $n-2$ nodos.
+    Una secuencia de Prüfer es un arreglo de $n-2$ elementos, donde cada elemento $a_i$ se encuentra entre $1 \leq a_i \leq n$.
+
+    Los pasos para generar la secuencia de Prüfer a partir de un árbol son:
+
+    1. Tomar la \textbf{hoja} con la etiqueta/valor más pequeña/o.
+    2. Remover el nodo del árbol.
+    3. Pushear a la secuencia el nodo adyacente a esa hoja.
+
+    Al final, la cantidad de veces que aparece un nodo en la secuencia es igual al grado del nodo menos 1.
+
+    Si quisieramos obtener el árbol a apartir de una secuencia de Prufer hacemos lo siguiente:
+
+    Por un lado mantendremos la lista A y la secuencia de Prüfer en la lista B.
+    Inicialmente la lista A tendrá a todas las hojas (osea los que no se encuentran en la lista B).
+
+    Luego en cada iteración haremos lo siguiente:
+
+    Tomar el valor más pequeño de la lista A y el primer elemento de la lista B (de izq a der).
+    Crear una arista entre estos dos valores.
+    Popear el elemento de la lista A.
+    Si el elemento de la lista B no aparece más en la lista (más adelante ya no se encuentra), popearlo también.
+
+
+    Al final tendremos 2 elementos en la lista A, crear una arista entre estos dos nodos.
+
+    NOTA: MANEJA LOS CASOS CUANDO N = 1
+}
