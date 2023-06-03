@@ -1,6 +1,13 @@
 #define ull unsigned long long
 
 
+/* FASTER BUT DEPENDS ON COMPILER IF ITS 64-bits I THINK */
+// inline ull multMod(ull a, ull b, ull c) {
+//   ll ret = a * b - c * ull(1.L / c * a * b);
+//   return ret + c * (ret < 0) - c * (ret >= (ll)c);
+// }
+
+
 ull multMod(ull a, ull b, ull mod) {
     ull res = 0;
     a %= mod;
@@ -52,8 +59,6 @@ bool isPrimeMillerRabin(lli n)
 }
 
 
-
-
 lli getFactor(lli n) {
     lli a = rand(), b = rand();
     lli x = 2, y = 2, d = 1;
@@ -68,6 +73,29 @@ lli getFactor(lli n) {
 
     return d;
 }
+
+/* FASTER */
+// lli getFactor(lli n){
+//     lli a = rand(), b = rand();
+//     lli x = 2;
+
+//     auto f = [&](auto x){ 
+//         lli aux = multMod(x, x+a, n) + b;
+//         return aux >= n ? aux - n : aux;
+//     };
+
+//     for(int l = 256; l < (1 << 20); l <<= 1) {
+//         lli y = x;
+//         for(int i = 0; i < l; i++){
+//             x = f(x);
+//             if(lli g = gcd(abs(x-y), n); g != 1) {
+//                 return g;
+//             }
+//         }
+//     }
+//     return 1;
+// }
+
 
 
 map<lli,int> factors;
