@@ -3,6 +3,7 @@
  * Sample use
  * vi a;
  * WaveletTree wv( a.begin(), a.end(), *min_element(a.begin(), a.end()), *max_element(a.begin(),a.end()) );
+ * 1-indexed
  */
 struct WaveletTree{
 	int low,high;
