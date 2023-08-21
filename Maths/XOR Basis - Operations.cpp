@@ -40,26 +40,21 @@ lli sz_basis = 0;
 
 void insert_vector(lli mask, bool zeros = false) //Zeros -> make zeros above basis[i]
 {
-    for(int i = LOG_D-1; i>=0; i--)
-    {
+    for(int i = LOG_D-1; i>=0; i--){
         if(!(mask & (1LL<<i))) continue;
 
-        if(!basis[i])
-        {
+        if(!basis[i]){
             basis[i] = mask;
 			sz_basis++;
 
 			if(!zeros) return;
 
-			for(int j = 0; j<LOG_D; j++)
-			{
+			for(int j = 0; j<LOG_D; j++){
 				if(j==i) continue;
-				if(j < i)
-				{
+				if(j < i){
 					if(basis[i] & (1LL << j)) basis[i] ^= basis[j];
 				}
-				else
-				{
+				else{
 					if(basis[j] & (1LL << i)) basis[j] ^= basis[i];
 				}
 			}

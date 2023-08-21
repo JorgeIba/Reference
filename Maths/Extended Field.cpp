@@ -35,6 +35,7 @@ struct Ext{
 
     Ext inv() const {
         lli den = a*a%mod - sqr*b%mod*b%mod;
+        assert(den != 0);
         if(den < 0) den += mod;
         return conj() * powerMod(den, mod-2, mod);
     }

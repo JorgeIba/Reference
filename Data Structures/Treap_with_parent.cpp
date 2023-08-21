@@ -1,25 +1,85 @@
-template<typename T = int>
-struct TreapNode {
-	TreapNode<T> *left, *right, *parent;
+template<typename T>
+struct TreapNode{
 	T value;
 	int key, size;
- 
-	TreapNode (T value = 0) : left(0), right(0), parent(0), value(value), key(rand()), size(1) {}
+    TreapNode<T> *left, *right, *parent;
+    
+	//fields for queries
+	T left_v, right_v, best_left, best_right;
+    T best;
+
+	TreapNode(T value = 0): value(value), key(rand()), size(1), left(0), right(0), parent(0), left_v(value), right_v(value), best_left(1), best_right(1), best(1) {}
 };
 
-using Node = TreapNode<int>;
- 
+
 template<typename T>
 inline int nodeSize (TreapNode<T>* t) { return t ? t->size : 0; }
- 
+
 template<typename T>
-inline void update (TreapNode<T>* &t) {
-	if (!t) return;
-	t->size = 1 + nodeSize(t->left) + nodeSize(t->right);
-	if (t->left) t->left->parent = t;
-	if (t->right) t->right->parent = t;
+void inorder(TreapNode<T>* t){
+    if(!t) return;
+    inorder(t->left);
+    cout << t->value << " ";
+    inorder(t->right);
 }
- 
+
+template<typename T>
+inline void merge_nodes(TreapNode<T>* &parent, TreapNode<T>* left, TreapNode<T>* right) {
+
+    int left_v = left->left_v;
+    int best_left = left->best_left;
+    int right_v = right->right_v;
+    int best_right = right->best_right;
+    int best = max(left->best, right->best);
+    int sizee = left->size + right->size;
+    
+    if(left->right_v == right->left_v) {
+        best = max(best, left->best_right + right->best_left);
+        
+        bool right_full = (right->best_left == right->size);
+        bool left_full  = (left->best_right == left->size);
+
+        if(left_full && right_full) {
+            assert(left_v == right_v);
+            best_left = left->size + right->size;
+            best_right = left->size + right->size;
+        } else if(left_full && !right_full) {
+            best_left = left->size + right->best_left;
+        } else if(!left_full && right_full){
+            best_right = left->best_right + right->size;
+        }
+    }
+
+    parent->size = sizee;
+    parent->left_v = left_v;
+    parent->best_left = best_left;
+    parent->best = best;
+    parent->right_v = right_v;
+    parent->best_right = best_right;    
+
+    // DO NOT TOUCH VALUE parent->value because for Reset
+}
+
+template<typename T>  
+inline void update(TreapNode<T>* &t){
+    if(!t) return;
+
+    // Reset
+    t->size = 1;
+    t->best_left = t->best = t->best_right = 1;
+    t->left_v = t->right_v = t->value;
+
+    if(t->left) {
+        t->left->parent = t;
+        merge_nodes(t, t->left, t);
+    }
+
+    if(t->right) {
+        t->right->parent = t;
+        merge_nodes(t, t, t->right);
+    }
+}
+
 template<typename T>
 inline void push (TreapNode<T>* &t) {
 	if (!t) return;

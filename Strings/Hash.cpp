@@ -3,6 +3,7 @@ struct Hash {
 	lli MOD=212345678987654321LL,P=1777771,PI=106955741089659571LL;
   // lli MOD = 1e9 + 7, P = 31, PI = 129032259ll; // For lowercase english letters
   // lli MOD = 1e9 + 7, P = 53, PI = 56603774ll; // For lower/uppercase english letters
+  // lli MOD = 1824261409, P = 53, PI = 1411221090; 
 	vector<lli> h,pi;
 	Hash(string& s){
 		assert((P*PI)%MOD==1);

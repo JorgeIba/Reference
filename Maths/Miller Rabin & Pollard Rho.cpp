@@ -1,10 +1,10 @@
-#define ull unsigned long long
 
 
+typedef unsigned long long ull;
 /* FASTER BUT DEPENDS ON COMPILER IF ITS 64-bits I THINK */
 // inline ull multMod(ull a, ull b, ull c) {
 //   ll ret = a * b - c * ull(1.L / c * a * b);
-//   return ret + c * (ret < 0) - c * (ret >= (ll)c);
+//   return ret + c * (ret < 0) - c * (ret >= (lli)c);
 // }
 
 

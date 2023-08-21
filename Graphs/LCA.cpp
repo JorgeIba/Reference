@@ -16,7 +16,7 @@ struct LCA_T{
 
         // min_ancestors.assign(n, vector<int>(maxLOG));
 
-        dfs(root, adjList, 0);
+        dfs(root, adjList);
         prec();
     }
 
