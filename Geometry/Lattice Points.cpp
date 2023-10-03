@@ -1,4 +1,5 @@
-// Here is simple function which calculates number of integer points $(x;y)$ such for $0 \leq x < n$ and $0 < y \leq \lfloor k x+b\rfloor$:
+// Here is simple function which calculates number of integer points $(x;y)$
+// such for $0 \leq x < n$ and $0 < y \leq \lfloor k x+b\rfloor$:
 int count_lattices(Fraction k, Fraction b, long long n) {
     auto fk = k.floor();
     auto fb = b.floor();

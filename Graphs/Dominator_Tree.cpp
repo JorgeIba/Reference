@@ -1,16 +1,16 @@
-//Grafo indexado en 1
+// Grafo indexado en 1
 const int MX = 100005;
 vi adj[MX], tree[MX], rad[MX], buc[MX];
 int sdom[MX], par[MX], dom[MX], dsu[MX], lab[MX];
 int arr[MX], rev[MX], cnt;
 
-void init () {
+void init() {
     cnt = 1;
     for (int i = 0; i < MX; i++)
         sdom[i] = dsu[i] = lab[i] = i;
 }
 
-void dfs (int u) {
+void dfs(int u) {
     arr[u] = cnt, rev[cnt] = u, cnt++;
 
     for (int v : adj[u]) {
@@ -22,14 +22,14 @@ void dfs (int u) {
     }
 }
 
-int find (int u, int x = 0) {
+int find(int u, int x = 0) {
     if (u == dsu[u])
         return x ? -1 : u;
-    
-    int v = find (dsu[u], x + 1);
+
+    int v = find(dsu[u], x + 1);
     if (v < 0)
         return u;
-    
+
     if (sdom[lab[dsu[u]]] < sdom[lab[u]])
         lab[u] = lab[dsu[u]];
     dsu[u] = v;
@@ -37,11 +37,9 @@ int find (int u, int x = 0) {
     return x ? v : lab[u];
 }
 
-void joint (int u, int v) {
-    dsu[v] = u;
-}
+void joint(int u, int v) { dsu[v] = u; }
 
-void obtDT () {
+void obtDT() {
     init();
     dfs(1);
 

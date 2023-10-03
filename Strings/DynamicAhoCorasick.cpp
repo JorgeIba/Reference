@@ -1,128 +1,128 @@
-Aho Corasick Dinámico: const int MX = 300005, SIG = 26, LMX = 19;
+Aho Corasick Dinámico : const int MX = 300005, SIG = 26, LMX = 19;
 
 struct aho_corasick {
-	struct Node {
-		Node *sig[SIG], *fail;
-		int finish, cnt;
+    struct Node {
+        Node *sig[SIG], *fail;
+        int finish, cnt;
 
-		Node () : fail(this), finish(0), cnt(0) {
-			for (int i = 0; i < SIG; i++)
-				sig[i] = this;
-		}
+        Node() : fail(this), finish(0), cnt(0) {
+            for (int i = 0; i < SIG; i++)
+                sig[i] = this;
+        }
 
-		Node (Node *root) : fail(root), finish(0), cnt(0) {
-			for (int i = 0; i < SIG; i++)
-				sig[i] = root;
-		}
-	};
+        Node(Node *root) : fail(root), finish(0), cnt(0) {
+            for (int i = 0; i < SIG; i++)
+                sig[i] = root;
+        }
+    };
 
-	Node *root;
+    Node *root;
 
-	aho_corasick() { reset(); }
+    aho_corasick() { reset(); }
 
-	void reset () {
-		root = new Node;
-	}
+    void reset() { root = new Node; }
 
-	void insert (string &s, int ind) {
-		Node *u = root;
+    void insert(string &s, int ind) {
+        Node *u = root;
 
-		for (char c : s) {
-			c -= 'a';
+        for (char c : s) {
+            c -= 'a';
 
-			if (u->sig[c] == root) {
-				u->sig[c] = new Node(root);
-				u->sig[c]->finish = -1;
-			}
+            if (u->sig[c] == root) {
+                u->sig[c] = new Node(root);
+                u->sig[c]->finish = -1;
+            }
 
-			u = u->sig[c];
-		}
+            u = u->sig[c];
+        }
 
-		u->finish = ind;
-		u->cnt++;
-	}
+        u->finish = ind;
+        u->cnt++;
+    }
 
-	Node* getFail (Node *u, int c) {
-		while (u != root && u->sig[c] == root)
-			u = u->fail;
-		return u->sig[c];
-	}
+    Node *getFail(Node *u, int c) {
+        while (u != root && u->sig[c] == root)
+            u = u->fail;
+        return u->sig[c];
+    }
 
-	void build () {
-		queue<Node*> q;
-		
-		for (int i = 0; i < SIG; i++)
-			if (root->sig[i] != root)
-				q.push(root->sig[i]);
+    void build() {
+        queue<Node *> q;
 
-		while (q.size()) {
-			Node *u = q.front();
-			q.pop();
+        for (int i = 0; i < SIG; i++)
+            if (root->sig[i] != root)
+                q.push(root->sig[i]);
 
-			for (int i = 0; i < SIG; i++) {
-				Node *v = u->sig[i];
+        while (q.size()) {
+            Node *u = q.front();
+            q.pop();
 
-				if (v != root) {
-					v->fail = getFail(u->fail, i);
-					v->cnt += v->fail->cnt;
-					q.push(v);
-				}
-			}
-		}
-	}
+            for (int i = 0; i < SIG; i++) {
+                Node *v = u->sig[i];
 
-	int match (string &t) {
-		Node *u = root;
-		int res = 0;
+                if (v != root) {
+                    v->fail = getFail(u->fail, i);
+                    v->cnt += v->fail->cnt;
+                    q.push(v);
+                }
+            }
+        }
+    }
 
-		for (int i = 0; i < t.size(); i++) {
-			char c = t[i] - 'a';
-			
-			if (u->sig[c] != root)
-				u = u->sig[c];
-			else
-				u = getFail(u->fail, c);
-			res += u->cnt;
-		}
+    int match(string &t) {
+        Node *u = root;
+        int res = 0;
 
-		return res;
-	}
+        for (int i = 0; i < t.size(); i++) {
+            char c = t[i] - 'a';
+
+            if (u->sig[c] != root)
+                u = u->sig[c];
+            else
+                u = getFail(u->fail, c);
+            res += u->cnt;
+        }
+
+        return res;
+    }
 };
 
-typedef vector<string*> vs;
+typedef vector<string *> vs;
 
 struct dynamic_aho_corasick {
-	aho_corasick ac[LMX];
-	vs s[LMX];
-	int exi;
+    aho_corasick ac[LMX];
+    vs s[LMX];
+    int exi;
 
-	dynamic_aho_corasick () : exi(0) {}
+    dynamic_aho_corasick() : exi(0) {}
 
-	int insert (string &str) {
-		int j = 0;
-		while (exi & (1 << j)) j++;
-		s[j].push_back(new string(str));
+    int insert(string &str) {
+        int j = 0;
+        while (exi & (1 << j))
+            j++;
+        s[j].push_back(new string(str));
 
-		for (int i = 0; i < j; i++) {
-			for (string *t : s[i]) s[j].push_back(t);
-			s[i].clear();
-			ac[i].reset();
-		}
+        for (int i = 0; i < j; i++) {
+            for (string *t : s[i])
+                s[j].push_back(t);
+            s[i].clear();
+            ac[i].reset();
+        }
 
-		for (string *t : s[j])
-			ac[j].insert(*t, 1);
-		ac[j].build();
+        for (string *t : s[j])
+            ac[j].insert(*t, 1);
+        ac[j].build();
 
-		exi++;
-	}
+        exi++;
+    }
 
-	int match (string &t) {
-		int res = 0;
+    int match(string &t) {
+        int res = 0;
 
-		for (int i = 0; i < LMX; i++)
-			if (exi & (1 << i))
-				res += ac[i].match(t);
+        for (int i = 0; i < LMX; i++)
+            if (exi & (1 << i))
+                res += ac[i].match(t);
 
-		return res;
-	}
+        return res;
+    }
 };
