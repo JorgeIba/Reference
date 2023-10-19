@@ -4,8 +4,9 @@ int isOn(int s, int j){  return s & (1 << j); }
 int clearBit(int s, int j){ return s & ~(1 << j);  }
 int setBit(int s, int j){  return s | (1 << j); }
 int toggleBit(int s, int j){  return s ^ (1 << j); }
-int isPowerofTwo(int s){ return s & (s-1);   }
+bool isPowerofTwo(lli s){ return (s & (s-1)) == 0; }
 int turnOffLastBit(int s){ return s & (s-1);  }
+int MSB(int x) { return 31 - __builtin_clz(x); } // Most significant bit
 //__builtin_popcount(n) counting the number of 1's
 //__builtin_popcountll(n) counting the number of 1's
 
