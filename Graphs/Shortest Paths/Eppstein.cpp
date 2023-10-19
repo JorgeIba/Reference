@@ -27,6 +27,7 @@ vector<Node*> pq;
 void init () {
 	adj.resize(n + 1);
 	rev.resize(n + 1);
+	pq.resize(n + 1);
 }
 
 Node * merge (Node *a, Node *b) {
