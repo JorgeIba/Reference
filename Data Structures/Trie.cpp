@@ -1,22 +1,19 @@
-struct TrieNode{
-    map<char, TrieNode*> dictionary;
+struct TrieNode {
+    map<char, TrieNode *> dictionary;
     int howMuchWords = 0;
     int isWord = 0;
 };
 
-struct Trie{
+struct Trie {
     TrieNode *root = new TrieNode;
-    
-    bool exist(TrieNode* curr, char c) {
-        return curr->dictionary.count(c);
-    }
 
-    void insert(const string &s){
+    bool exist(TrieNode *curr, char c) { return curr->dictionary.count(c); }
+
+    void insert(const string &s) {
         TrieNode *curr = root;
         curr->howMuchWords++;
-        for(auto c: s)
-        {
-            if(!exist(curr, c))
+        for (auto c : s) {
+            if (!exist(curr, c))
                 curr->dictionary[c] = new TrieNode();
             curr = curr->dictionary[c];
             curr->howMuchWords++;
@@ -24,11 +21,11 @@ struct Trie{
         curr->isWord++;
     }
 
-    lli search(const string &word){
+    lli search(const string &word) {
         TrieNode *curr = root;
         lli ans = -1;
-        for(auto c: word){
-            if(!exist(curr, c)){
+        for (auto c : word) {
+            if (!exist(curr, c)) {
                 return 0;
             }
             curr = curr->dictionary[c];
@@ -37,96 +34,85 @@ struct Trie{
         return ans;
     }
 
-    
     // Assume word exists
-    void remove(TrieNode* curr, const string &word, int idx = 0) {
+    void remove(TrieNode *curr, const string &word, int idx = 0) {
         curr->howMuchWords--;
 
-        if(idx == SZ(word)) {
+        if (idx == SZ(word)) {
             curr->isWord--;
             return;
         }
 
-
         auto c = word[idx];
         auto next = curr->dictionary[c];
-        remove(next, word, idx+1);
+        remove(next, word, idx + 1);
 
-        if(!next->howMuchWords) {
-            delete(next);
+        if (!next->howMuchWords) {
+            delete (next);
             next = NULL;
             curr->dictionary.erase(c);
         }
     }
 
-
-    void Rec(TrieNode *root, const string &s)
-    {
-        for(auto c: root->dictionary)
-        {
+    void Rec(TrieNode *root, const string &s) {
+        for (auto c : root->dictionary) {
             string aux = s;
             aux.push_back(c.first);
             Rec(c.second, aux);
         }
-        if(root->isWord)
+        if (root->isWord)
             cout << s << endl;
     }
 
-    void printWords()
-    {
+    void printWords() {
         string aux;
         Rec(root, aux);
     }
 };
 
-
-
 // BINARY
 const int maxLOG = 31;
 
-struct TrieNode{
+struct TrieNode {
     TrieNode *dict[2] = {NULL, NULL};
     int howMuchWords = 0;
     int isWord = 0;
 };
 
-struct Trie{
+struct Trie {
     TrieNode *root = new TrieNode;
-    
-    bool exist(TrieNode* curr, int c) {
-        return curr->dict[c] != NULL;
-    }
+
+    bool exist(TrieNode *curr, int c) { return curr->dict[c] != NULL; }
 
     // s = bitset.to_string
-    void insert(const string &s){
+    void insert(const string &s) {
         TrieNode *curr = root;
         curr->howMuchWords++;
-        for(auto ch: s)
-        {
+        for (auto ch : s) {
             int c = (ch == '1');
-            if(!exist(curr, c))
+            if (!exist(curr, c))
                 curr->dict[c] = new TrieNode();
             curr = curr->dict[c];
             curr->howMuchWords++;
         }
         curr->isWord++;
     }
-    
+
     // Assume word exists
-    void remove(TrieNode* curr, const string &word, int idx = 0) {
+    void remove(TrieNode *curr, const string &word, int idx = 0) {
         curr->howMuchWords--;
 
-        if(idx == SZ(word)) {
+        if (idx == SZ(word)) {
             curr->isWord--;
             return;
         }
 
         auto c = (word[idx] == '1');
         auto next = curr->dict[c];
-        remove(next, word, idx+1);
+        remove(next, word, idx + 1);
 
-        if(!next->howMuchWords) {
-            delete(next);
+        if (!next->howMuchWords) {
+            delete (next);
             next = NULL;
             curr->dict[c] = NULL;
         }
@@ -135,23 +121,25 @@ struct Trie{
     // Numbers lower-equal than LimitL
     int query(const string limitL) {
         int ans = 0;
-        TrieNode* curr = root;
-        for(int i = 0; i < maxLOG; i++) {
+        TrieNode *curr = root;
+        for (int i = 0; i < maxLOG; i++) {
             int bit_l = (limitL[i] == '1' ? 1 : 0);
 
-            if(bit_l) {
+            if (bit_l) {
                 auto left = curr->dict[0];
                 auto right = curr->dict[1];
 
                 ans += (left ? left->howMuchWords : 0);
 
-                if(!right) break;
+                if (!right)
+                    break;
                 curr = right;
-            }else {
+            } else {
                 auto left = curr->dict[0];
                 auto right = curr->dict[1];
 
-                if(!left) break;
+                if (!left)
+                    break;
                 curr = left;
             }
         }
@@ -160,24 +148,23 @@ struct Trie{
         return ans;
     }
 
-
-
-    void Rec(TrieNode *root, const string &s){
-        for(int c = 0; c <= 1; c++){
-            if(!exist(root, c)) continue;
+    void Rec(TrieNode *root, const string &s) {
+        for (int c = 0; c <= 1; c++) {
+            if (!exist(root, c))
+                continue;
 
             string aux = s;
-            auto ch = (c == 1? '1' : '0');
+            auto ch = (c == 1 ? '1' : '0');
             aux.push_back(ch);
 
             assert(root->dict[c] != NULL);
             Rec(root->dict[c], aux);
         }
-        if(root->isWord)
+        if (root->isWord)
             cout << s << endl;
     }
 
-    void printWords(){
+    void printWords() {
         string aux;
         Rec(root, aux);
     }

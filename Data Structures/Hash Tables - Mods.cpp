@@ -8,7 +8,8 @@ struct custom_hash { //* Safest
     }
 
     size_t operator()(uint64_t x) const {
-        static const uint64_t FIXED_RANDOM = chrono::steady_clock::now().time_since_epoch().count();
+        static const uint64_t FIXED_RANDOM =
+            chrono::steady_clock::now().time_since_epoch().count();
         return splitmix64(x + FIXED_RANDOM);
     }
 };
@@ -24,9 +25,12 @@ struct chash {
     int operator()(int x) const { return hash_f(x); }
 };
 
-// Safer and works better for fenwick tree or some based power of 2 data structure
+// Safer and works better for fenwick tree or some based power of 2 data
+// structure
 struct chash {
-    const int RANDOM = (long long)(make_unique<char>().get()) ^ chrono::high_resolution_clock::now().time_since_epoch().count();
+    const int RANDOM =
+        (long long)(make_unique<char>().get()) ^
+        chrono::high_resolution_clock::now().time_since_epoch().count();
     static unsigned long long hash_f(unsigned long long x) {
         x += 0x9e3779b97f4a7c15;
         x = (x ^ (x >> 30)) * 0xbf58476d1ce4e5b9;
@@ -34,13 +38,13 @@ struct chash {
         return x ^ (x >> 31);
     }
     static unsigned hash_combine(unsigned a, unsigned b) { return a * 31 + b; }
-    int operator()(int x) const { return hash_f(x)^RANDOM; }
+    int operator()(int x) const { return hash_f(x) ^ RANDOM; }
 };
 typedef gp_hash_table<int, int, chash> umapp
 
-
-//* Safe
-const int RANDOM = chrono::high_resolution_clock::now().time_since_epoch().count();
+    //* Safe
+    const int RANDOM =
+        chrono::high_resolution_clock::now().time_since_epoch().count();
 struct custom_hash {
     int operator()(int x) const { return x ^ RANDOM; }
 };

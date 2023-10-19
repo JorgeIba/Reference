@@ -12,14 +12,18 @@ struct MCFGraph {
     bool dijkstra(int s, int t) {
         dis.assign(n, std::numeric_limits<i64>::max());
         pre.assign(n, -1);
-        std::priority_queue<std::pair<i64, int>, std::vector<std::pair<i64, int>>, std::greater<std::pair<i64, int>>> que;
+        std::priority_queue<std::pair<i64, int>,
+                            std::vector<std::pair<i64, int>>,
+                            std::greater<std::pair<i64, int>>>
+            que;
         dis[s] = 0;
         que.emplace(0, s);
         while (!que.empty()) {
             i64 d = que.top().first;
             int u = que.top().second;
             que.pop();
-            if (dis[u] < d) continue;
+            if (dis[u] < d)
+                continue;
             for (int i : g[u]) {
                 int v = e[i].v;
                 int c = e[i].c;
@@ -52,9 +56,11 @@ struct MCFGraph {
         i64 cost = 0;
         h.assign(n, 0);
         while (dijkstra(s, t)) {
-            for (int i = 0; i < n; ++i) h[i] += dis[i];
+            for (int i = 0; i < n; ++i)
+                h[i] += dis[i];
             int aug = std::numeric_limits<int>::max();
-            for (int i = t; i != s; i = e[pre[i] ^ 1].v) aug = std::min(aug, e[pre[i]].c);
+            for (int i = t; i != s; i = e[pre[i] ^ 1].v)
+                aug = std::min(aug, e[pre[i]].c);
             for (int i = t; i != s; i = e[pre[i] ^ 1].v) {
                 e[pre[i]].c -= aug;
                 e[pre[i] ^ 1].c += aug;

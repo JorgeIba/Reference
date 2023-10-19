@@ -1,5 +1,4 @@
-ld simpson_rule(ld a, ld b, int n = 1e5)
-{
+ld simpson_rule(ld a, ld b, int n = 1e5) {
     ld h = (b - a) / n;
 
     ld sum_odds = 0.0;
