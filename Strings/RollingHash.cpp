@@ -10,6 +10,11 @@ struct RollingHash {
         magic = (magic * p) % mod;
         curr.push_back(newAdd);
     }
+    void push_front(char newAdd) {
+        magic = (magic * p) % mod;
+        hash = (hash + newAdd * magic) % mod;
+        curr.push_front(newAdd);
+    }
     char pop_front() {
         char oldErase = curr.front();
         hash = (hash - oldErase * magic) % mod;
@@ -19,7 +24,6 @@ struct RollingHash {
         curr.pop_front();
         return oldErase;
     }
-
     char pop_back() {
         char last = curr.back();
         hash = (hash - curr.back() * p) % mod;
@@ -29,12 +33,6 @@ struct RollingHash {
         magic = (magic * inverse_p) % mod;
         curr.pop_back();
         return last;
-    }
-
-    void push_front(char newAdd) {
-        magic = (magic * p) % mod;
-        hash = (hash + newAdd * magic) % mod;
-        curr.push_front(newAdd);
     }
 
     void shiftRight() { push_front(pop_back()); }

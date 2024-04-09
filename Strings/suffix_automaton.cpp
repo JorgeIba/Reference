@@ -5,24 +5,16 @@ struct state {
     state(int len, int link, map<int, int> child)
         : len(len), link(link), child(child) {}
 };
-
 struct SuffixAutomaton {
     vector<state> st;
     int last = 0;
-
-    // It's used to store info about the automaton, for example, the number of
-    // paths that pass through a node, which can be used to get the number of
-    // different strings
     vector<vector<lli>> dp;
-
     SuffixAutomaton() { st.emplace_back(); }
-
     void extend(char c) {
         int curr = (int)st.size(), p;
         st.emplace_back(st[last].len + 1);
         for (p = last; p != -1 && !st[p].child.count(c); p = st[p].link)
             st[p].child[c] = curr;
-
         if (p == -1)
             st[curr].link = 0;
         else {
@@ -60,21 +52,5 @@ struct SuffixAutomaton {
         dfs(0, is_ac, 0);
         // Number of strings that node u can reach
         dfs(0, dp[0], 1);
-    }
-    void get_kth_string_with_rep(int u, lli &k, string &t) {
-        if (u)
-            k -= dp[0][u];
-        if (k <= 0) {
-            return;
-        }
-        for (auto [c, v] : st[u].child) {
-            if (dp[1][v] >= k) {
-                t += (char)c;
-                get_kth_string_with_rep(v, k, t);
-                return;
-            }
-            k -= dp[1][v];
-        }
-        assert(false);
     }
 };

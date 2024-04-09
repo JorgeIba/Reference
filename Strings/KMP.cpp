@@ -1,7 +1,3 @@
-/*
- * preffix array at position i gives us the length of the largest propper
- * preffix which is also a suffix in substring patt[0,...,i]
- */
 vector<int> preffix_function(string &patt) {
     int length = patt.size();
     vector<int> lps(length, 0);
@@ -14,10 +10,8 @@ vector<int> preffix_function(string &patt) {
     }
     return lps;
 }
-// Returns an array of all the indexes of text where pattern can be found
 vector<int> kmp(string text, string pattern) {
     vector<int> indexes;
-    int i = 0;
     int j = 0;
     vector<int> lps = preffix_function(pattern);
     for (int i = 0; i < text.size(); i++) {
@@ -50,11 +44,6 @@ vector<int> number_of_occ_preff(string s) {
         ans[i]++;
     return ans;
 }
-/*
- * This function returns the minimum length of a string that is the
- * compression of the given string, for example, for string: abaabaaba this
- * function returns 3
- */
 int length_of_min_compression(string s) {
     vector<int> pi = preffix_function(s);
     int n = s.size();
@@ -63,7 +52,6 @@ int length_of_min_compression(string s) {
         return k;
     return n;
 }
-
 void compute_automaton(string s, vector<vector<int>> &aut) {
     s += '#';
     int n = s.size();
