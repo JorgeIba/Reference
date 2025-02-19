@@ -13,8 +13,9 @@ struct SuffixArray {
         vector<int> p_new(n), cnt(n + 1);
         for (int x : c)
             cnt[x + 1]++;
-        for (int i = 1; i < n; i++)
-            cnt[i] += cnt[i - 1];
+
+        partial_sum(all(cnt), cnt.begin());
+        
         for (int x : p)
             p_new[cnt[c[x]]++] = x;
         p.swap(p_new);
@@ -30,38 +31,34 @@ struct SuffixArray {
 
         for (int i = 0; i < N; i++)
             a[i] = {t[i], i};
-        sort(a.begin(), a.end());
+        
+        sort(all(a));
 
         for (int i = 0; i < N; i++)
             suff[i] = a[i].second;
 
         c_new[suff[0]] = 0;
         for (int i = 1; i < N; i++) {
-            if (a[i].first == a[i - 1].first)
-                c_new[suff[i]] = c_new[suff[i - 1]];
-            else
-                c_new[suff[i]] = c_new[suff[i - 1]] + 1;
+            int x = suff[i-1], y = suff[i];
+            c_new[y] = c_new[x] + (a[i].first != a[i - 1].first);
         }
-        cl.push_back(c_new);
 
-        int k = 0;
-        while ((1 << k) < N) {
+        cl.push_back(c_new);
+        for(int k = 1; k < N; k <<= 1) {
             auto &c = cl.back();
             for (int i = 0; i < N; i++)
-                suff[i] = (suff[i] - (1 << k) + N) % N;
+                suff[i] = (suff[i] + N - k) % N;
+
             count_sort(suff, c);
+
             c_new[suff[0]] = 0;
             for (int i = 1; i < N; i++) {
-                pair<int, int> prev = {c[suff[i - 1]],
-                                       c[(suff[i - 1] + (1 << k)) % N]};
-                pair<int, int> now = {c[suff[i]], c[(suff[i] + (1 << k)) % N]};
-                if (now == prev)
-                    c_new[suff[i]] = c_new[suff[i - 1]];
-                else
-                    c_new[suff[i]] = c_new[suff[i - 1]] + 1;
+                int x = suff[i-1], y = suff[i];
+                pair<int, int> prev = {c[x], c[(x + k) % N]};
+                pair<int, int> now = {c[y], c[(y + k) % N]};
+                c_new[y] = c_new[x] + (now != prev);
             }
             cl.push_back(c_new);
-            k++;
         }
     }
 

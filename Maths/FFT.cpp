@@ -21,7 +21,7 @@ void fft(vector<cd> &A, bool inv) // O(n logn)
     vector<cd> w(n >> 1);
 
     for (int k = 2; k <= n; k <<= 1) {
-        // cd w1 = polar(1.0, (inv?-1:1) * 2 * PI / k) ;
+        // cd w1 = polar((ld)1.0, (inv?-1:1) * 2 * PI / k) ;
         w[0] = 1;
         for (int j = 1; j < k >> 1; j++) // best precision but slower
             w[j] = polar((ld)1.0, (inv ? -1 : 1) * 2 * j * PI / k);

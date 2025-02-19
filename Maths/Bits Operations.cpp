@@ -10,21 +10,21 @@ int turnOffLastBit(int s) { return s & (s - 1); }
 //__builtin_popcountll(n) counting the number of 1's
 
 // 5
-for (int mask = n; mask; mask = (mask - 1) & n) // to traverse all submasks
+for (int mask = n; mask; mask = (mask - 1) & n) // to traverse all submasks, doesnt touch 0
 
-    // 13
-    int getSetBitsFromOneToN(int N) {
-        int two = 2, ans = 0;
-        int n = N;
-        while (n) {
-            ans += (N / two) * (two >> 1);
-            if ((N & (two - 1)) > (two >> 1) - 1)
-                ans += (N & (two - 1)) - (two >> 1) + 1;
-            two <<= 1;
-            n >>= 1;
-        }
-        return ans;
+// 13
+int getSetBitsFromOneToN(int N) {
+    int two = 2, ans = 0;
+    int n = N;
+    while (n) {
+        ans += (N / two) * (two >> 1);
+        if ((N & (two - 1)) > (two >> 1) - 1)
+            ans += (N & (two - 1)) - (two >> 1) + 1;
+        two <<= 1;
+        n >>= 1;
     }
+    return ans;
+}
 
 // 15
 long computeXOR(int n) {
