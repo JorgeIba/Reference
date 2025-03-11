@@ -1,3 +1,5 @@
+// O(Fmn) where F is the maximum flow
+
 template <typename T = int> struct Edge {
     int to;
     T flow, capacity, cost;

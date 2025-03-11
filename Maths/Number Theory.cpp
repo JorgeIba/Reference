@@ -126,3 +126,30 @@ lli coprimesInRange(lli n, lli L, lli R) {
     }
     return ans;
 }
+
+// Generate partitions eficciently
+template<class L>
+void gen_partitions(int n, L f){
+	vector<int> a(n);
+	int k = 1, y = n-1;
+	while(k != 0){
+		int x = a[k-1] + 1;
+		k--;
+		while(2*x <= y){
+			a[k] = x;
+			y -= x;
+			k++;
+		}
+		int l = k+1;
+		while(x <= y){
+			a[k] = x;
+			a[l] = y;
+			f(vector<int>(a.begin(), a.begin() + k+2));
+			x++;
+			y--;
+		}
+		a[k] = x+y;
+		y = x+y-1;
+		f(vector<int>(a.begin(), a.begin() + k+1));
+	}
+}
