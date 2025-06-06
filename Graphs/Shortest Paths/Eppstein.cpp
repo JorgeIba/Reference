@@ -1,148 +1,144 @@
-#define fi first
-#define se second
-#define all(v) v.begin(), v.end()
+// Complexity: O((m + k) * log(n))
 #define pb push_back
 
-typedef long long ll;
-typedef pair<ll, ll> ii;
-typedef vector<ll> vi;
-typedef vector<ii> vii;
+typedef long long int dist_t;
+typedef pair<dist_t,int> info_t;
+typedef pair<int,dist_t> edge;
+const dist_t NONE = 1e9;
 
-// Complejidad: O((m + k) * log(n))
-
+template<typename T>
 struct Node {
-    ii val;
-    Node *izq, *der;
+    T val;
+    Node *left, *right;
 
-    Node() : val(ii(0, 0)), izq(0), der(0) {}
-    Node(const ii &val) : val(val), izq(0), der(0) {}
+    Node() : val(T(0, 0)), left(0), right(0) {}
+    Node(const T &val) : val(val), left(0), right(0) {}
     Node(Node *t) { *this = *t; }
+
+    static Node<T> *merge(Node *a, Node *b) {
+        if (!a)
+            return b;
+        if (!b)
+            return a;
+
+        if (a->val > b->val)
+            swap(a, b);
+
+        Node *nt = new Node(a);
+        if (rand() % 2)
+            nt->right = merge(nt->right, b);
+        else
+            nt->left = merge(nt->left, b);
+
+        return nt;
+    }
+
+    static Node<T> *pop(Node *a) { return merge(a->left, a->right); }
 };
 
-int n;
-vi dis, p;
-vector<vii> adj, rev;
-vector<Node *> pq;
+using Heap = Node<info_t>;
+struct Eppstein {
+    int n;
+    vector<dist_t> dist;
+    vector<int> p;
+    vector<vector<edge>> adj, rev;
+    vector<Heap*> pq;
 
-void init() {
-    adj.resize(n + 1);
-    rev.resize(n + 1);
-    pq.resize(n + 1);
-}
+    Eppstein(int n): n(n), adj(n), rev(n), pq(n) {}
 
-Node *merge(Node *a, Node *b) {
-    if (!a)
-        return b;
-    if (!b)
-        return a;
-
-    if (a->val > b->val)
-        swap(a, b);
-
-    Node *nt = new Node(a);
-    if (rand() % 2)
-        nt->der = merge(nt->der, b);
-    else
-        nt->izq = merge(nt->izq, b);
-
-    return nt;
-}
-
-Node *pop(Node *a) { return merge(a->izq, a->der); }
-
-void dij(int s) {
-    dis = vi(n + 1, -1);
-    p = vi(n + 1, -1);
-
-    dis[s] = 0;
-    priority_queue<ii, vii, greater<ii>> pq;
-    pq.emplace(0, s);
-
-    while (pq.size()) {
-        int u = pq.top().se;
-        ll d = pq.top().fi;
-        pq.pop();
-
-        if (dis[u] < d)
-            continue;
-
-        for (ii &v : rev[u]) {
-            ll w = d + v.se;
-            if (dis[v.fi] == -1 || dis[v.fi] > w) {
-                dis[v.fi] = w;
-                p[v.fi] = u;
-                pq.emplace(w, v.fi);
-            }
-        }
+    void add(int u, int v, dist_t w) {
+        adj[u].pb({v, w});
+        rev[v].pb({u, w});
     }
-}
 
-typedef pair<ll, Node *> tin;
-vi klp(int s, int t, int k) {
-    dij(t);
+    // Calculates dist and parent.
+    // parent[u] = edge s.t. u should go to there to reach t
+    void shortest_path(int s) {
+        dist = vector<dist_t>(n, NONE);
+        p = vector<int>(n + 1, -1);
 
-    vi q(n);
-    iota(all(q), 1);
+        dist[s] = 0;
+        priority_queue<info_t, vector<info_t>, greater<info_t>> pq;
+        pq.emplace(0, s);
 
-    sort(all(q), [&](int i, int j) { return dis[i] < dis[j]; });
+        while (pq.size()) {
+            auto [u, d] = pq.top();
+            pq.pop();
 
-    for (int u : q) {
-        if (dis[u] == -1)
-            continue;
-
-        if (p[u] != -1)
-            pq[u] = pq[p[u]];
-
-        int f = 1;
-
-        for (ii &v : adj[u]) {
-            if (dis[v.fi] == -1)
+            if (dist[u] < d)
                 continue;
 
-            if (v.fi != p[u] || dis[u] != dis[v.fi] + v.se || !f) {
-                Node *nt = new Node({dis[v.fi] + v.se - dis[u], v.fi});
-                pq[u] = merge(pq[u], nt);
-            } else {
-                f = 0;
+            for (auto &[v, vw] : rev[u]) {
+                dist_t w = d + vw;
+                if (dist[v] == -1 || dist[v] > w) {
+                    dist[v] = w;
+                    p[v] = u;
+                    pq.emplace(w, v);
+                }
             }
         }
     }
 
-    if (dis[s] == -1)
-        return vi(k, -1);
+    typedef pair<dist_t, Heap*> tin;
+    vector<dist_t> k_shortest_paths(int s, int t, int k) {
+        shortest_path(t);
 
-    vi res = {dis[s]};
-    k--;
-    priority_queue<tin, vector<tin>, greater<tin>> hp;
-    if (pq[s])
-        hp.emplace(dis[s] + pq[s]->val.fi, pq[s]);
+        vector<int> order(n);
+        iota(all(order), 0);
+        sort(all(order), [&](int i, int j) { return dist[i] < dist[j]; });
+        // auto order = toposort_bfs(adj);
+        // reverse(all(order));
 
-    while (k && hp.size()) {
-        ll d = hp.top().fi;
-        Node *t = hp.top().se;
-        hp.pop();
+        for (int u : order) {
+            if (dist[u] == NONE)
+                continue;
 
-        res.pb(d);
+            if (p[u] != -1)
+                pq[u] = pq[p[u]];
+
+            int f = 1;
+
+            for (auto &[v, w] : adj[u]) {
+                if (dist[v] == NONE)
+                    continue;
+
+                if (v != p[u] || dist[u] != dist[v] + w || !f) {
+                    Heap *nt = new Heap({dist[v] + w - dist[u], v});
+                    pq[u] = Heap::merge(pq[u], nt);
+                } else {
+                    f = 0;
+                }
+            }
+        }
+
+        if (dist[s] == NONE)
+            return vector<dist_t>(k, NONE);
+
+        vector<dist_t> res = {dist[s]};
         k--;
+        priority_queue<tin, vector<tin>, greater<tin>> hp;
+        if (pq[s])
+            hp.emplace(dist[s] + pq[s]->val.first, pq[s]);
 
-        int v = t->val.se;
-        if (pq[v])
-            hp.emplace(d + pq[v]->val.fi, pq[v]);
+        while (k && hp.size()) {
+            auto [d, t] = hp.top(); hp.pop();
 
-        d -= t->val.fi;
-        t = pop(t);
-        if (t)
-            hp.emplace(d + t->val.fi, t);
+            res.pb(d);
+            k--;
+
+            int v = t->val.second;
+            if (pq[v])
+                hp.emplace(d + pq[v]->val.first, pq[v]);
+
+            d -= t->val.first;
+            t = Heap::pop(t);
+            if (t)
+                hp.emplace(d + t->val.first, t);
+        }
+
+        // Fill with -1 remaining paths
+        res.resize(SZ(res) + k, NONE);
+
+        return res;
     }
-
-    // Rellena con -1 si hay menos de k caminos.
-    while (k--)
-        res.pb(-1);
-
-    return res;
-}
-
-void add(int u, int v, int w) {
-    adj[u].pb({v, w});
-    rev[v].pb({u, w});
-}
+};
